@@ -391,7 +391,7 @@ const App: React.FC = () => {
                />
             </div>
 
-            <RetroSign className="w-full md:max-w-3xl border-[6px] shadow-2xl">
+            <RetroSign className="w-full md:max-w-4xl border-[6px] shadow-2xl">
                <motion.h1 
                  initial={{ y: 30, opacity: 0 }}
                  animate={{ y: 0, opacity: 1 }}
