@@ -19,7 +19,8 @@ import {
   Sparkles,
   ChevronRight,
   Send,
-  ArrowDown
+  ArrowDown,
+  Link
 } from 'lucide-react';
 import {
   motion,
@@ -223,6 +224,35 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [scrolled, setScrolled] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const subject = encodeURIComponent("Liên hệ từ website");
+    const body = encodeURIComponent(
+      `Tên: ${form.name}
+Email: ${form.email}
+Nội dung:
+${form.message}`
+    );
+
+    window.location.href = `mailto:youremail@gmail.com?subject=${subject}&body=${body}`;
+  };
+
+
+
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -306,7 +336,7 @@ const App: React.FC = () => {
             className="text-2xl font-black uppercase tracking-tighter retro-shadow text-[#bc4749] flex items-center gap-2 cursor-pointer"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-             PHU'S PORTFOLIO
+            PHU'S PORTFOLIO
           </motion.div>
 
           <div className="hidden md:flex items-center space-x-1">
@@ -391,14 +421,9 @@ const App: React.FC = () => {
 
         <div className="max-w-5xl w-full z-10">
           <RetroSign>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="flex flex-col lg:flex-row-reverse items-center "
-          >
-           
-            <div className="relative mb-12">
+
+
+            <div className="relative mb-12 lg:mb-0 shrink-0">
               <motion.div
                 initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
@@ -419,7 +444,7 @@ const App: React.FC = () => {
               />
             </div>
 
-            <div className="w-full md:max-w-4xl ">
+            <div className="md:max-w-4xl flex-grow">
               <motion.h1
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -428,14 +453,14 @@ const App: React.FC = () => {
               >
                 {PERSONAL_INFO.displayName}
               </motion.h1>
-            
-                <motion.div
+
+              <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: 100 }}
                 transition={{ delay: 1, duration: 1 }}
-                className="h-2 bg-[#bc4749] mb-8 d-inline mx-auto" 
+                className="h-2 bg-[#bc4749] mb-8 d-inline mx-auto"
               />
-              
+
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -444,7 +469,7 @@ const App: React.FC = () => {
               >
                 {PERSONAL_INFO.role}
               </motion.p>
-              <div className="text-lg md:text-xl italic font-semibold max-w-2xl mb-12 leading-relaxed text-gray-800 dark:text-[#FDF5E6] h-16">
+              <div className="text-lg md:text-xl italic font-semibold mb-12 leading-relaxed text-gray-800 dark:text-[#FDF5E6] h-16">
                 <Typewriter text={PERSONAL_INFO.tagline} />
               </div>
               <div className="flex flex-wrap justify-center gap-6">
@@ -453,7 +478,7 @@ const App: React.FC = () => {
                     onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                     className="group bg-[#386641] text-white px-10 py-4 rounded-sm font-black uppercase tracking-widest hover:bg-[#2d5234] transition-all flex items-center gap-3 shadow-2xl"
                   >
-                    Thuê Tôi <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    Tuyển dụng tôi <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </button>
                 </Magnetic>
                 <Magnetic strength={40}>
@@ -467,7 +492,7 @@ const App: React.FC = () => {
                 </Magnetic>
               </div>
             </div>
-          </motion.div>
+
           </RetroSign>
         </div>
 
@@ -706,12 +731,17 @@ const App: React.FC = () => {
                   <div className="flex items-center gap-3 text-xs font-black text-[#386641] dark:text-[#6a994e] uppercase tracking-widest">
                     <BookOpen className="w-4 h-4" /> Công nghệ • AI • {new Date().toLocaleDateString('vi-VN')}
                   </div>
-                  <h3 className="text-3xl font-black uppercase group-hover:text-[#bc4749] transition-all leading-tight">Ứng dụng Gemini AI vào quy trình phát triển phần mềm hiện đại</h3>
-                  <p className="text-base line-clamp-3 text-gray-800 dark:text-white font-semibold leading-relaxed">Khám phá cách tận dụng sức mạnh của các mô hình ngôn ngữ lớn để tăng tốc độ code và cải thiện chất lượng sản phẩm thông qua các ví dụ thực tế...</p>
+                  <h3 className="text-3xl font-black uppercase group-hover:text-[#bc4749] transition-all leading-tight">Trang Blog Phú Làm Công Nghệ</h3>
+                  <p className="text-base line-clamp-3 text-gray-800 dark:text-white font-semibold leading-relaxed">Với vai trò GSA, mình tập trung truyền đạt cách ứng dụng AI vào học tập, nghiên cứu, lập trình và công việc thực tế — giúp bạn làm nhanh hơn, hiểu sâu hơn và tận dụng công nghệ thông minh hơn mỗi ngày</p>
                   <Magnetic strength={15}>
-                    <div className="inline-flex items-center gap-3 font-black uppercase text-xs tracking-[0.3em] group-hover:gap-6 transition-all group-hover:text-[#bc4749]">
+                    <a
+                      href="https://www.facebook.com/phulamcongnghe"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 font-black uppercase text-xs tracking-[0.3em] hover:gap-6 transition-all hover:text-[#bc4749]"
+                    >
                       Đọc thêm <ArrowRight className="w-5 h-5" />
-                    </div>
+                    </a>
                   </Magnetic>
                 </div>
               </motion.div>
@@ -730,7 +760,7 @@ const App: React.FC = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <RetroSign className="mb-12 border-[6px] shadow-2xl">
+              <RetroSign className="mb-12 border-[6px] shadow-2xl" noneRow>
                 <h2 className="text-5xl md:text-7xl font-black uppercase mb-6 tracking-tighter retro-3d-text">
                   Liên Hệ <span className="text-white">Ngay</span>
                 </h2>
@@ -806,11 +836,14 @@ const App: React.FC = () => {
               <h3 className="text-4xl font-black uppercase mb-12 text-center text-[#386641] dark:text-[#bc4749] tracking-tighter">
                 Gửi Tin Nhắn
               </h3>
-              <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-8" onSubmit={handleSubmit}>
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Danh tính của bạn</label>
                   <input
                     type="text"
+                    name="name"
+                    onChange={handleChange}
+                    value={form.name}
                     placeholder="NGUYỄN VĂN A"
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
@@ -819,6 +852,9 @@ const App: React.FC = () => {
                   <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Địa chỉ liên hệ</label>
                   <input
                     type="email"
+                    name="email"
+                    onChange={handleChange}
+                    value={form.email}
                     placeholder="EMAIL@EXAMPLE.COM"
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
@@ -827,6 +863,9 @@ const App: React.FC = () => {
                   <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Lời nhắn của bạn</label>
                   <textarea
                     rows={5}
+                    name="message"
+                    onChange={handleChange}
+                    value={form.message}
                     placeholder="TÔI MUỐN HỢP TÁC..."
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
@@ -907,7 +946,7 @@ const App: React.FC = () => {
                 className="absolute inset-0 border-4 border-white rounded-full"
                 style={{
                   pathLength: scrollYProgress,
-                  clipPath: `inset(${(1 - scrollYProgress.get()) * 100}% 0 0 0)` 
+                  clipPath: `inset(${(1 - scrollYProgress.get()) * 100}% 0 0 0)`
                 }}
               />
               <ArrowRight className="w-8 h-8 -rotate-90 group-hover:-translate-y-1 transition-transform" />

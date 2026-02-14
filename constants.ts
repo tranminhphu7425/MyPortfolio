@@ -61,6 +61,12 @@ export const EXPERIENCES: Experience[] = [
     role: "Sinh Viên",
     period: "2021 - 2025 (4 năm)",
     description: "Theo học chuyên ngành Công nghệ thông tin, tập trung vào phát triển phần mềm và kiến thức hệ thống."
+  },
+  {
+    company: "Google Student Ambassador Program",
+    role: "Đại sứ sinh viên Google",
+    period: "2026 - 2027 (1 năm)",
+    description: "Đại diện cho Google tại trường đại học, tổ chức sự kiện, chia sẻ kiến thức về công nghệ và hỗ trợ cộng đồng sinh viên trong việc tiếp cận các sản phẩm và dịch vụ của Google."
   }
 ];
 
