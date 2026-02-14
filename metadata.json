@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Tran Minh Phu - Portfolio Retro",
+  "description": "A professional portfolio website for Tran Minh Phu featuring a classic Vietnamese retro signage aesthetic, built with React, Tailwind CSS, and Framer Motion.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
