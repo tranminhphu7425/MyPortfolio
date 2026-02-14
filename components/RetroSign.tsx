@@ -8,17 +8,22 @@ interface RetroSignProps {
 }
 
 const RetroSign: React.FC<RetroSignProps> = ({ children, className = "", variant = 'primary' }) => {
-  const bgColor = variant === 'primary' ? 'bg-[#FDF5E6]' : 'bg-[#bc4749]';
-  const borderColor = variant === 'primary' ? 'border-[#386641]' : 'border-[#FDF5E6]';
-  const textColor = variant === 'primary' ? 'text-[#386641]' : 'text-[#FDF5E6]';
+  // Use Tailwind classes directly for better dark mode compatibility
+  const containerClasses = variant === 'primary' 
+    ? 'bg-[#FDF5E6] border-[#386641] text-[#386641] dark:bg-[#252525] dark:border-[#FDF5E6] dark:text-[#FDF5E6]' 
+    : 'bg-[#bc4749] border-[#FDF5E6] text-[#FDF5E6] dark:bg-[#a53b3d] dark:border-[#FDF5E6] dark:text-[#FDF5E6]';
+
+  const decorationClasses = variant === 'primary'
+    ? 'border-[#386641] dark:border-[#FDF5E6]'
+    : 'border-[#FDF5E6]';
 
   return (
-    <div className={`relative p-8 border-4 ${borderColor} ${bgColor} ${textColor} rounded-sm shadow-xl vintage-texture ${className}`}>
+    <div className={`relative p-8 border-4 shadow-xl vintage-texture transition-all ${containerClasses} rounded-sm ${className}`}>
       {/* Decorative corners */}
-      <div className={`absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 ${borderColor}`}></div>
-      <div className={`absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 ${borderColor}`}></div>
-      <div className={`absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 ${borderColor}`}></div>
-      <div className={`absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 ${borderColor}`}></div>
+      <div className={`absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 ${decorationClasses}`}></div>
+      <div className={`absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 ${decorationClasses}`}></div>
+      <div className={`absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 ${decorationClasses}`}></div>
+      <div className={`absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 ${decorationClasses}`}></div>
       
       <div className="relative z-10 flex flex-col items-center text-center">
         {children}
