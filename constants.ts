@@ -22,7 +22,7 @@ export const PROJECTS: Project[] = [
     tech: ["React", "TypeScript", "Spring Boot"],
     demoUrl: "https://tranminhphu7425.github.io/quiz-universe/#/",
     githubUrl: "https://github.com/tranminhphu7425/quiz-universe",
-    imageUrl: "https://picsum.photos/seed/quiz/800/600",
+    imageUrl: "public/uploads/QuizUniverse.png",
   },
   {
     id: "graph-builder",
@@ -31,11 +31,11 @@ export const PROJECTS: Project[] = [
     tech: ["React"],
     demoUrl: "https://tranminhphu7425.id.vn/",
     githubUrl: "https://github.com/tranminhphu7425/graphbuilder",
-    imageUrl: "https://picsum.photos/seed/graph/800/600",
+    imageUrl: "public/uploads/GraphBuilder.png",
   },
   {
-    id: "badminton-booking",
-    title: "Badminton Booking",
+    id: "SportBooking",
+    title: "SportBooking",
     description: "Đặt sân thể thao trực tuyến, hỗ trợ ứng dụng cho cả người đặt sân, người cung cấp dịch vụ sân, và cả admin quản lý hệ thống.",
     tech: ["React", "NodeJS"],
     demoUrl: "https://github.com/tranminhphu7425/badminton-court-booking",

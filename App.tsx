@@ -1,31 +1,31 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { 
-  Github, 
-  Facebook, 
-  Mail, 
-  Phone, 
-  Download, 
-  ExternalLink, 
-  Moon, 
-  Sun, 
-  Code2, 
-  Award, 
-  Briefcase, 
-  User, 
-  BookOpen, 
+import {
+  Github,
+  Facebook,
+  Mail,
+  Phone,
+  Download,
+  ExternalLink,
+  Moon,
+  Sun,
+  Code2,
+  Award,
+  Briefcase,
+  User,
+  BookOpen,
   MessageSquare,
   ArrowRight,
   Sparkles,
   ChevronRight,
   Send
 } from 'lucide-react';
-import { 
-  motion, 
-  AnimatePresence, 
-  useScroll, 
-  useSpring, 
-  useTransform, 
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useTransform,
   useInView,
   useMotionValue
 } from 'framer-motion';
@@ -115,7 +115,7 @@ const Counter = ({ value, duration = 2 }: { value: number; duration?: number }) 
   return <span ref={ref}>{count}</span>;
 };
 
-const ProjectCard = ({ project, index }: { project: any; index: number }) => {
+const ProjectCard = ({ key, project, index }: { key: any; project: any; index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -138,6 +138,7 @@ const ProjectCard = ({ project, index }: { project: any; index: number }) => {
 
   return (
     <motion.div
+      key={project.id}
       ref={cardRef}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -149,28 +150,54 @@ const ProjectCard = ({ project, index }: { project: any; index: number }) => {
       className="group relative flex flex-col h-full border-4 border-[#386641] dark:border-white bg-white dark:bg-[#111] overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl"
     >
       <div className="relative h-56 overflow-hidden">
-        <motion.img 
-          src={project.imageUrl} 
-          alt={project.title} 
+        <motion.img
+          src={project.imageUrl}
+          alt={project.title}
           className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
           whileHover={{ scale: 1.15 }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-6">
           <div className="flex gap-4">
             <Magnetic strength={20}>
-              <a href={project.demoUrl} target="_blank" className="text-white hover:text-[#bc4749] transition-colors p-3 bg-white/10 rounded-full backdrop-blur-md border border-white/20">
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center
+      p-3 rounded-full
+      text-white
+      bg-white/10 backdrop-blur-md
+      border border-white/20
+      transition-all duration-300
+      hover:text-[#bc4749]
+      hover:scale-110 active:scale-95"
+              >
                 <ExternalLink className="w-5 h-5" />
               </a>
             </Magnetic>
+
             <Magnetic strength={20}>
-              <a href={project.githubUrl} target="_blank" className="text-white hover:text-[#bc4749] transition-colors p-3 bg-white/10 rounded-full backdrop-blur-md border border-white/20">
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center
+      p-3 rounded-full
+      text-white
+      bg-white/10 backdrop-blur-md
+      border border-white/20
+      transition-all duration-300
+      hover:text-[#bc4749]
+      hover:scale-110 active:scale-95"
+              >
                 <Github className="w-5 h-5" />
               </a>
             </Magnetic>
           </div>
+
         </div>
       </div>
-      
+
       <div className="p-8 flex flex-col flex-grow relative z-10">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-2xl font-black uppercase tracking-tighter text-[#bc4749]">
@@ -197,7 +224,7 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [scrolled, setScrolled] = useState(false);
-  
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
@@ -207,7 +234,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-      
+
       // Update active section based on scroll
       const sections = ['home', 'about', 'projects', 'blog', 'contact'];
       for (const section of sections) {
@@ -246,8 +273,8 @@ const App: React.FC = () => {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       transition: { staggerChildren: 0.2 }
     }
   };
@@ -262,39 +289,39 @@ const App: React.FC = () => {
 
   return (
     <div className={`motion-container min-h-screen transition-colors duration-700 font-medium ${isDarkMode ? 'bg-[#1a1a1a] text-[#FDF5E6]' : 'bg-[#FDF5E6] text-[#333]'}`}>
-      
+
       {/* Scroll Progress Bar */}
-      <motion.div 
+      <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-[#bc4749] origin-left z-[60]"
         style={{ scaleX }}
       />
 
       {/* Navigation */}
-      <motion.nav 
+      <motion.nav
         style={{ padding: navbarPadding }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? (isDarkMode ? 'bg-[#1a1a1a]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl' : 'bg-[#FDF5E6]/95 backdrop-blur-xl border-b border-[#386641]/10 shadow-lg') : 'bg-transparent'}`}
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-8">
-          <motion.div 
+          <motion.div
             whileHover={{ scale: 1.05 }}
             className="text-2xl font-black uppercase tracking-tighter retro-shadow text-[#bc4749] flex items-center gap-2 cursor-pointer"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <Sparkles className="w-7 h-7 animate-pulse" /> MINH PHÚ
           </motion.div>
-          
+
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map(item => (
               <Magnetic key={item.id} strength={20}>
                 <button
                   onClick={() => {
-                     document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
                   }}
                   className={`relative px-4 py-2 uppercase font-bold text-xs tracking-[0.2em] transition-all duration-300 hover:text-[#bc4749] ${activeTab === item.id ? 'text-[#bc4749]' : isDarkMode ? 'text-white' : 'text-gray-800'}`}
                 >
                   {item.label}
                   {activeTab === item.id && (
-                    <motion.div 
+                    <motion.div
                       layoutId="activeNav"
                       className="absolute bottom-0 left-4 right-4 h-0.5 bg-[#bc4749]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
@@ -307,7 +334,7 @@ const App: React.FC = () => {
 
           <div className="flex items-center space-x-3">
             <Magnetic strength={30}>
-              <button 
+              <button
                 onClick={toggleDarkMode}
                 className="p-3 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all active:scale-90"
                 aria-label="Toggle Dark Mode"
@@ -326,9 +353,9 @@ const App: React.FC = () => {
               </button>
             </Magnetic>
             <Magnetic strength={20}>
-              <a 
-                href={PERSONAL_INFO.cvUrl} 
-                target="_blank" 
+              <a
+                href={PERSONAL_INFO.cvUrl}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#bc4749] text-white px-6 py-2.5 rounded-sm font-black uppercase text-[10px] tracking-widest hover:bg-[#a53b3d] transition-all flex items-center gap-2 shadow-lg hover:shadow-red-500/20 active:scale-95"
               >
@@ -343,105 +370,105 @@ const App: React.FC = () => {
       <section id="home" className="relative pt-32 pb-20 px-4 flex flex-col items-center justify-center overflow-hidden min-h-screen">
         {/* Abstract Background Shapes */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.2, 1],
               rotate: [0, 90, 0],
               opacity: [0.1, 0.15, 0.1]
-            }} 
+            }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-1/4 -right-1/4 w-[800px] h-[800px] bg-gradient-to-br from-[#bc4749] to-transparent rounded-full blur-[100px]" 
+            className="absolute -top-1/4 -right-1/4 w-[800px] h-[800px] bg-gradient-to-br from-[#bc4749] to-transparent rounded-full blur-[100px]"
           />
-          <motion.div 
-             animate={{ 
+          <motion.div
+            animate={{
               scale: [1.2, 1, 1.2],
               rotate: [0, -90, 0],
               opacity: [0.1, 0.15, 0.1]
-            }} 
+            }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-1/4 -left-1/4 w-[800px] h-[800px] bg-gradient-to-tr from-[#386641] to-transparent rounded-full blur-[100px]" 
+            className="absolute -bottom-1/4 -left-1/4 w-[800px] h-[800px] bg-gradient-to-tr from-[#386641] to-transparent rounded-full blur-[100px]"
           />
         </div>
 
         <div className="max-w-5xl w-full z-10">
-          <motion.div 
+          <motion.div
             initial="hidden"
             animate="visible"
             variants={containerVariants}
             className="flex flex-col items-center"
           >
-            <div className="relative mb-16">
-               <motion.div 
-                 initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
-                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                 transition={{ type: "spring", stiffness: 100, damping: 20, duration: 1 }}
-                 whileHover={{ scale: 1.05, rotate: 5 }}
-                 className="w-56 h-56 md:w-72 md:h-72 rounded-full overflow-hidden border-[12px] border-[#386641] dark:border-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-white/5 relative z-10 cursor-pointer"
-               >
-                 <img 
-                   src={PERSONAL_INFO.avatar} 
-                   alt={PERSONAL_INFO.fullName} 
-                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                 />
-               </motion.div>
-               <motion.div 
-                 animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
-                 transition={{ duration: 4, repeat: Infinity }}
-                 className="absolute -inset-4 bg-[#bc4749] rounded-full -z-0 blur-3xl"
-               />
+            <div className="relative mb-12">
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
+                animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 100, damping: 20, duration: 1 }}
+                whileHover={{ scale: 1.05, rotate: 5 }}
+                className="w-56 h-56 md:w-80 md:h-80 rounded-full overflow-hidden border-[12px] border-[#386641] dark:border-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-white/5 relative z-10 cursor-pointer"
+              >
+                <img
+                  src={PERSONAL_INFO.avatar}
+                  alt={PERSONAL_INFO.fullName}
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                />
+              </motion.div>
+              <motion.div
+                animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="absolute -inset-4 bg-[#bc4749] rounded-full -z-0 blur-3xl"
+              />
             </div>
 
             <RetroSign className="w-full md:max-w-4xl border-[6px] shadow-2xl">
-               <motion.h1 
-                 initial={{ y: 30, opacity: 0 }}
-                 animate={{ y: 0, opacity: 1 }}
-                 transition={{ delay: 0.3, duration: 0.8 }}
-                 className="text-5xl md:text-8xl font-black uppercase mb-4 tracking-tight retro-3d-text"
-               >
-                 {PERSONAL_INFO.displayName}
-               </motion.h1>
-               <motion.div 
-                 initial={{ width: 0 }}
-                 animate={{ width: 100 }}
-                 transition={{ delay: 1, duration: 1 }}
-                 className="h-2 bg-[#bc4749] mb-8" 
-               />
-               <motion.p 
-                 initial={{ y: 20, opacity: 0 }}
-                 animate={{ y: 0, opacity: 1 }}
-                 transition={{ delay: 0.5, duration: 0.8 }}
-                 className="text-2xl md:text-3xl font-black uppercase tracking-[0.3em] mb-8 text-[#386641] dark:text-[#bc4749]"
-               >
-                 {PERSONAL_INFO.role}
-               </motion.p>
-               <div className="text-lg md:text-xl italic font-semibold max-w-2xl mb-12 leading-relaxed text-gray-800 dark:text-[#FDF5E6] h-16">
-                 <Typewriter text={PERSONAL_INFO.tagline} />
-               </div>
-               <div className="flex flex-wrap justify-center gap-6">
-                  <Magnetic strength={40}>
-                    <button 
-                      onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="group bg-[#386641] text-white px-10 py-4 rounded-sm font-black uppercase tracking-widest hover:bg-[#2d5234] transition-all flex items-center gap-3 shadow-2xl"
-                    >
-                      Thuê Tôi <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                    </button>
-                  </Magnetic>
-                  <Magnetic strength={40}>
-                    <a 
-                      href={PERSONAL_INFO.github}
-                      target="_blank"
-                      className="group border-4 border-[#386641] dark:border-retro-dark text-inherit px-10 py-4 rounded-sm font-black uppercase tracking-widest hover:bg-[#386641] dark:hover:bg-retro-dark hover:text-white dark:hover:text-[#FDF5E6] transition-all shadow-xl flex items-center gap-3"
-                    >
-                      GitHub <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                    </a>
-                  </Magnetic>
-               </div>
+              <motion.h1
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                className="text-5xl md:text-8xl font-black uppercase mb-4 tracking-tight retro-3d-text"
+              >
+                {PERSONAL_INFO.displayName}
+              </motion.h1>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: 100 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="h-2 bg-[#bc4749] mb-8"
+              />
+              <motion.p
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="text-2xl md:text-3xl font-black uppercase tracking-[0.3em] mb-8 text-[#386641] dark:text-[#bc4749]"
+              >
+                {PERSONAL_INFO.role}
+              </motion.p>
+              <div className="text-lg md:text-xl italic font-semibold max-w-2xl mb-12 leading-relaxed text-gray-800 dark:text-[#FDF5E6] h-16">
+                <Typewriter text={PERSONAL_INFO.tagline} />
+              </div>
+              <div className="flex flex-wrap justify-center gap-6">
+                <Magnetic strength={40}>
+                  <button
+                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="group bg-[#386641] text-white px-10 py-4 rounded-sm font-black uppercase tracking-widest hover:bg-[#2d5234] transition-all flex items-center gap-3 shadow-2xl"
+                  >
+                    Thuê Tôi <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                  </button>
+                </Magnetic>
+                <Magnetic strength={40}>
+                  <a
+                    href={PERSONAL_INFO.github}
+                    target="_blank"
+                    className="group border-4 border-[#386641] dark:border-retro-dark text-inherit px-10 py-4 rounded-sm font-black uppercase tracking-widest hover:bg-[#386641] dark:hover:bg-retro-dark hover:text-white dark:hover:text-[#FDF5E6] transition-all shadow-xl flex items-center gap-3"
+                  >
+                    GitHub <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                  </a>
+                </Magnetic>
+              </div>
             </RetroSign>
           </motion.div>
         </div>
-        
+
         {/* Scroll Indicator */}
-        <motion.div 
+        <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50"
@@ -464,19 +491,19 @@ const App: React.FC = () => {
               VỀ TÔI
             </div>
             <h2 className="text-5xl md:text-7xl font-black uppercase mb-10 tracking-tight retro-shadow leading-none">
-              Hành Trình <br/> & <span className="text-[#bc4749]">Đam Mê</span>
+              Hành Trình <br /> & <span className="text-[#bc4749]">Đam Mê</span>
             </h2>
             <div className="space-y-6 text-xl leading-relaxed text-gray-800 dark:text-[#FDF5E6] font-medium">
               <p>
-                Tôi là một sinh viên CNTT tại Đại học Cần Thơ, người luôn khao khát khám phá thế giới công nghệ. 
+                Tôi là một sinh viên CNTT tại Đại học Cần Thơ, người luôn khao khát khám phá thế giới công nghệ.
                 Với sự kiên trì và tư duy logic, tôi không chỉ học cách lập trình mà còn học cách giải quyết vấn đề một cách sáng tạo.
               </p>
               <p>
-                Phong cách làm việc của tôi là sự kết hợp giữa kỹ thuật vững chắc và tinh thần đổi mới. 
+                Phong cách làm việc của tôi là sự kết hợp giữa kỹ thuật vững chắc và tinh thần đổi mới.
                 Tôi tin rằng mỗi dòng code đều là một phần của giải pháp lớn hơn nhằm cải thiện trải nghiệm người dùng.
               </p>
             </div>
-            
+
             <div className="mt-12 grid grid-cols-2 gap-8">
               <motion.div whileHover={{ y: -10 }} className="p-8 border-l-8 border-[#386641] dark:border-white bg-white/50 dark:bg-black/30 backdrop-blur-md shadow-xl">
                 <div className="font-black text-[#bc4749] text-5xl mb-2">
@@ -506,7 +533,7 @@ const App: React.FC = () => {
               </h3>
               <div className="flex flex-wrap gap-3">
                 {SKILLS.map((skill, index) => (
-                  <motion.span 
+                  <motion.span
                     key={index}
                     whileHover={{ scale: 1.1, rotate: index % 2 === 0 ? 5 : -5 }}
                     className={`px-5 py-3 text-xs font-black uppercase border-2 shadow-md ${skill.category === 'technical' ? 'border-[#FDF5E6] text-[#FDF5E6]' : 'border-[#bc4749] text-[#bc4749] bg-[#FDF5E6]'} rounded-sm cursor-default transition-colors`}
@@ -523,8 +550,8 @@ const App: React.FC = () => {
               </h3>
               <ul className="space-y-6">
                 {ACHIEVEMENTS.map((ach, index) => (
-                  <motion.li 
-                    key={index} 
+                  <motion.li
+                    key={index}
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.2 }}
@@ -544,7 +571,7 @@ const App: React.FC = () => {
       <section id="projects" className="py-32 px-4 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               className="inline-block px-5 py-2 bg-[#bc4749] text-white font-black uppercase text-xs tracking-[0.4em] mb-6"
@@ -561,13 +588,13 @@ const App: React.FC = () => {
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </div>
-          
+
           <div className="mt-20 text-center">
-             <Magnetic strength={30}>
-                <a href={PERSONAL_INFO.github} target="_blank" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-[0.3em] hover:text-[#bc4749] transition-all group">
-                   Xem tất cả trên GitHub <ArrowRight className="w-5 h-5 group-hover:translate-x-3 transition-transform" />
-                </a>
-             </Magnetic>
+            <Magnetic strength={30}>
+              <a href={PERSONAL_INFO.github} target="_blank" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-[0.3em] hover:text-[#bc4749] transition-all group">
+                Xem tất cả trên GitHub <ArrowRight className="w-5 h-5 group-hover:translate-x-3 transition-transform" />
+              </a>
+            </Magnetic>
           </div>
         </div>
       </section>
@@ -582,23 +609,23 @@ const App: React.FC = () => {
             className="mb-20"
           >
             <RetroSign variant="secondary" className="border-[6px] shadow-2xl">
-               <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter">
-                 Kinh Nghiệm & Học Vấn
-               </h2>
+              <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter">
+                Kinh Nghiệm & Học Vấn
+              </h2>
             </RetroSign>
           </motion.div>
 
           <div className="relative space-y-12">
             {/* Animated Timeline Line */}
             <div className="absolute left-[26px] top-0 bottom-0 w-1 bg-gray-200 dark:bg-white/10 overflow-hidden">
-               <motion.div 
-                 style={{ scaleY: scrollYProgress, originY: 0 }}
-                 className="w-full h-full bg-[#bc4749]"
-               />
+              <motion.div
+                style={{ scaleY: scrollYProgress, originY: 0 }}
+                className="w-full h-full bg-[#bc4749]"
+              />
             </div>
 
             {EXPERIENCES.map((exp, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -607,12 +634,12 @@ const App: React.FC = () => {
                 className="relative pl-20 group"
               >
                 {/* Timeline Node */}
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
-                  className="absolute left-[14px] top-4 w-7 h-7 bg-[#bc4749] rounded-full border-[6px] border-[#FDF5E6] dark:border-[#1a1a1a] z-10 shadow-lg group-hover:scale-125 transition-transform" 
+                  className="absolute left-[14px] top-4 w-7 h-7 bg-[#bc4749] rounded-full border-[6px] border-[#FDF5E6] dark:border-[#1a1a1a] z-10 shadow-lg group-hover:scale-125 transition-transform"
                 />
-                
+
                 <div className="bg-white dark:bg-[#333] p-10 shadow-2xl border-4 border-[#386641] dark:border-white rounded-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)]">
                   <div className="flex flex-wrap justify-between items-center gap-6 mb-6">
                     <h3 className="text-3xl font-black uppercase text-[#386641] dark:text-white group-hover:text-[#bc4749] transition-colors">
@@ -650,10 +677,10 @@ const App: React.FC = () => {
                 Blog <span className="text-[#bc4749]">Cá Nhân</span>
               </h2>
             </motion.div>
-            <motion.p 
-               initial={{ opacity: 0, x: 50 }}
-               whileInView={{ opacity: 1, x: 0 }}
-               className="max-w-xl text-lg italic text-gray-700 dark:text-[#FDF5E6] font-bold border-l-4 border-[#bc4749] pl-6"
+            <motion.p
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="max-w-xl text-lg italic text-gray-700 dark:text-[#FDF5E6] font-bold border-l-4 border-[#bc4749] pl-6"
             >
               Viết về công nghệ, lập trình và cách ứng dụng AI trong thực tế để tối ưu hóa hiệu suất công việc.
             </motion.p>
@@ -661,8 +688,8 @@ const App: React.FC = () => {
 
           <div className="grid md:grid-cols-2 gap-16">
             {[1, 2].map((i) => (
-              <motion.div 
-                key={i} 
+              <motion.div
+                key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -692,7 +719,7 @@ const App: React.FC = () => {
       <section id="contact" className="py-32 px-4 overflow-hidden relative">
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-24 items-start">
-            
+
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -709,37 +736,59 @@ const App: React.FC = () => {
 
               <div className="space-y-8 mt-16">
                 <motion.div whileHover={{ x: 15 }} className="flex items-center gap-8 p-6 bg-white/50 dark:bg-black/40 border-4 border-[#386641]/20 hover:border-[#386641] dark:hover:border-white transition-all group shadow-xl backdrop-blur-md">
-                   <div className="p-5 bg-[#386641] text-white rounded-sm shadow-lg transform group-hover:rotate-12 transition-transform">
-                     <Mail className="w-8 h-8" />
-                   </div>
-                   <div>
-                     <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">Thư điện tử</div>
-                     <a href={`mailto:${PERSONAL_INFO.email}`} className="text-xl md:text-2xl font-black hover:text-[#bc4749] break-all dark:text-white transition-colors">{PERSONAL_INFO.email}</a>
-                   </div>
+                  <div className="p-5 bg-[#386641] text-white rounded-sm shadow-lg transform group-hover:rotate-12 transition-transform">
+                    <Mail className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">Thư điện tử</div>
+                    <a href={`mailto:${PERSONAL_INFO.email}`} className="text-xl md:text-2xl font-black hover:text-[#bc4749] break-all dark:text-white transition-colors">{PERSONAL_INFO.email}</a>
+                  </div>
                 </motion.div>
 
                 <motion.div whileHover={{ x: 15 }} className="flex items-center gap-8 p-6 bg-white/50 dark:bg-black/40 border-4 border-[#386641]/20 hover:border-[#386641] dark:hover:border-white transition-all group shadow-xl backdrop-blur-md">
-                   <div className="p-5 bg-[#bc4749] text-white rounded-sm shadow-lg transform group-hover:-rotate-12 transition-transform">
-                     <Phone className="w-8 h-8" />
-                   </div>
-                   <div>
-                     <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">Điện thoại</div>
-                     <a href={`tel:${PERSONAL_INFO.phone}`} className="text-xl md:text-2xl font-black hover:text-[#bc4749] dark:text-white transition-colors">{PERSONAL_INFO.phone}</a>
-                   </div>
+                  <div className="p-5 bg-[#bc4749] text-white rounded-sm shadow-lg transform group-hover:-rotate-12 transition-transform">
+                    <Phone className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">Điện thoại</div>
+                    <a href={`tel:${PERSONAL_INFO.phone}`} className="text-xl md:text-2xl font-black hover:text-[#bc4749] dark:text-white transition-colors">{PERSONAL_INFO.phone}</a>
+                  </div>
                 </motion.div>
 
                 <div className="flex gap-6 pt-8">
                   <Magnetic strength={40}>
-                    <a href={PERSONAL_INFO.github} target="_blank" className="p-5 border-4 border-[#386641] dark:border-white hover:bg-[#386641] hover:text-white transition-all shadow-2xl bg-white/20 backdrop-blur-md">
+                    <a
+                      href={PERSONAL_INFO.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center p-5 
+      border-4 border-[#386641] dark:border-white
+      bg-white/20 backdrop-blur-md
+      shadow-2xl
+      hover:bg-[#386641] hover:text-white
+      transition-all duration-300"
+                    >
                       <Github className="w-8 h-8" />
                     </a>
                   </Magnetic>
+
                   <Magnetic strength={40}>
-                    <a href={PERSONAL_INFO.facebook} target="_blank" className="p-5 border-4 border-[#386641] dark:border-white hover:bg-[#386641] hover:text-white transition-all shadow-2xl bg-white/20 backdrop-blur-md">
+                    <a
+                      href={PERSONAL_INFO.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center p-5 
+      border-4 border-[#386641] dark:border-white
+      bg-white/20 backdrop-blur-md
+      shadow-2xl
+      hover:bg-[#386641] hover:text-white
+      transition-all duration-300"
+                    >
                       <Facebook className="w-8 h-8" />
                     </a>
                   </Magnetic>
                 </div>
+
               </div>
             </motion.div>
 
@@ -755,30 +804,30 @@ const App: React.FC = () => {
               <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Danh tính của bạn</label>
-                  <input 
-                    type="text" 
-                    placeholder="NGUYỄN VĂN A" 
+                  <input
+                    type="text"
+                    placeholder="NGUYỄN VĂN A"
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
                 </div>
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Địa chỉ liên hệ</label>
-                  <input 
-                    type="email" 
-                    placeholder="EMAIL@EXAMPLE.COM" 
+                  <input
+                    type="email"
+                    placeholder="EMAIL@EXAMPLE.COM"
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
                 </div>
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Lời nhắn của bạn</label>
-                  <textarea 
+                  <textarea
                     rows={5}
-                    placeholder="TÔI MUỐN HỢP TÁC..." 
+                    placeholder="TÔI MUỐN HỢP TÁC..."
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
                 </div>
                 <Magnetic strength={20}>
-                  <button 
+                  <button
                     className="group w-full bg-[#bc4749] text-white py-6 font-black uppercase tracking-[0.4em] text-sm hover:bg-[#a53b3d] transition-all transform active:scale-95 shadow-2xl flex items-center justify-center gap-4"
                   >
                     GỬI NGAY <Send className="w-5 h-5 group-hover:translate-x-3 group-hover:-translate-y-3 transition-transform" />
@@ -789,15 +838,15 @@ const App: React.FC = () => {
 
           </div>
         </div>
-        
+
         {/* Background decorative text */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden opacity-[0.03] pointer-events-none select-none">
-          <motion.div 
+          <motion.div
             animate={{ x: [0, -1000] }}
             transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
             className="whitespace-nowrap text-[30vw] font-black uppercase tracking-tighter leading-none"
           >
-            TRAN MINH PHU • IT DEVELOPER • CREATIVE THINKING • VISUAL DESIGN • 
+            TRAN MINH PHU • IT DEVELOPER • CREATIVE THINKING • VISUAL DESIGN •
           </motion.div>
         </div>
       </section>
@@ -806,7 +855,7 @@ const App: React.FC = () => {
       <footer className={`py-20 border-t-[8px] border-[#bc4749] ${isDarkMode ? 'bg-[#111]' : 'bg-[#FDF5E6]'} relative overflow-hidden`}>
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left relative z-10">
           <div>
-            <motion.div 
+            <motion.div
               whileHover={{ letterSpacing: "0.2em" }}
               className="text-4xl font-black uppercase tracking-tighter text-[#bc4749] cursor-default transition-all duration-500"
             >
@@ -816,7 +865,7 @@ const App: React.FC = () => {
               © 2025 ALL RIGHTS RESERVED.
             </div>
           </div>
-          
+
           <div className="flex flex-wrap justify-center gap-10 uppercase font-black text-[10px] tracking-[0.4em]">
             {navItems.map(item => (
               <Magnetic key={item.id} strength={10}>
@@ -826,12 +875,12 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-6">
-             <motion.div whileHover={{ y: -5, rotate: 10 }} className="w-14 h-14 border-4 border-[#386641] dark:border-white flex items-center justify-center font-black text-2xl hover:bg-[#386641] hover:text-white dark:hover:bg-white dark:hover:text-[#1a1a1a] transition-all cursor-default shadow-lg">P</motion.div>
-             <motion.div whileHover={{ y: -5, rotate: -10 }} className="w-14 h-14 border-4 border-[#bc4749] flex items-center justify-center font-black text-2xl hover:bg-[#bc4749] hover:text-white transition-all cursor-default shadow-lg">H</motion.div>
-             <motion.div whileHover={{ y: -5, rotate: 10 }} className="w-14 h-14 border-4 border-[#386641] dark:border-white flex items-center justify-center font-black text-2xl hover:bg-[#386641] hover:text-white dark:hover:bg-white dark:hover:text-[#1a1a1a] transition-all cursor-default shadow-lg">U</motion.div>
+            <motion.div whileHover={{ y: -5, rotate: 10 }} className="w-14 h-14 border-4 border-[#386641] dark:border-white flex items-center justify-center font-black text-2xl hover:bg-[#386641] hover:text-white dark:hover:bg-white dark:hover:text-[#1a1a1a] transition-all cursor-default shadow-lg">P</motion.div>
+            <motion.div whileHover={{ y: -5, rotate: -10 }} className="w-14 h-14 border-4 border-[#bc4749] flex items-center justify-center font-black text-2xl hover:bg-[#bc4749] hover:text-white transition-all cursor-default shadow-lg">H</motion.div>
+            <motion.div whileHover={{ y: -5, rotate: 10 }} className="w-14 h-14 border-4 border-[#386641] dark:border-white flex items-center justify-center font-black text-2xl hover:bg-[#386641] hover:text-white dark:hover:bg-white dark:hover:text-[#1a1a1a] transition-all cursor-default shadow-lg">U</motion.div>
           </div>
         </div>
-        
+
         {/* Subtle footer pattern */}
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#386641_1px,transparent_1px)] [background-size:20px_20px]" />
       </footer>
@@ -840,7 +889,7 @@ const App: React.FC = () => {
       <AnimatePresence>
         {scrolled && (
           <Magnetic strength={40}>
-            <motion.button 
+            <motion.button
               initial={{ scale: 0, opacity: 0, rotate: -180 }}
               animate={{ scale: 1, opacity: 1, rotate: 0 }}
               exit={{ scale: 0, opacity: 0, rotate: 180 }}
@@ -849,9 +898,9 @@ const App: React.FC = () => {
               aria-label="Scroll to top"
             >
               <div className="absolute inset-0 border-4 border-white/20 rounded-full" />
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 border-4 border-white rounded-full"
-                style={{ 
+                style={{
                   pathLength: scrollYProgress,
                   clipPath: `inset(${(1 - scrollYProgress.get()) * 100}% 0 0 0)` // Simplified visual indicator
                 }}
