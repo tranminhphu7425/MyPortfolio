@@ -117,6 +117,8 @@ const Counter = ({ value, duration = 2 }: { value: number; duration?: number }) 
 
 const ProjectCard = ({ key, project, index }: { key: any; project: any; index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  // Assign variety based on index
+  const effectClass = index % 3 === 0 ? "crack-br" : index % 3 === 1 ? "spider-web-tl" : "";
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useTransform(y, [-100, 100], [10, -10]);
@@ -147,8 +149,9 @@ const ProjectCard = ({ key, project, index }: { key: any; project: any; index: n
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, perspective: 1000 }}
-      className="group relative flex flex-col h-full border-4 border-[#386641] dark:border-white bg-white dark:bg-[#111] overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl"
+      className={`group relative flex flex-col h-full border-4 border-[#386641] dark:border-white bg-white dark:bg-[#111] overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl dust-overlay ${effectClass}`}
     >
+      <div className="dust-layer"></div>
       <div className="relative h-56 overflow-hidden">
         <motion.img
           src={project.imageUrl}
@@ -319,6 +322,13 @@ ${form.message}`
   return (
     <div className={`motion-container min-h-screen transition-colors duration-700 font-medium ${isDarkMode ? 'bg-[#1a1a1a] text-[#FDF5E6]' : 'bg-[#FDF5E6] text-[#333]'}`}>
 
+      {/* Large Background Effects */}
+      <div className="bg-web-large" style={{ top: '5%', left: '-5%', transform: 'rotate(180deg)', opacity: 0.6 }} />
+      {/* <div className="bg-crack-large" style={{ top: '25%', right: '-15%', transform: 'rotate(45deg)' }} /> */}
+      
+      <div className="bg-crack-large" style={{ top: '75%', right: '-5%',  transform: 'rotate(-30deg) scale(0.6)' }} />
+      {/* <div className="bg-web-large" style={{ top: '90%', left: '20%', transform: 'rotate(90deg) scale(0.8)' }} /> */}
+
       {/* Scroll Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-[#bc4749] origin-left z-[60]"
@@ -429,8 +439,9 @@ ${form.message}`
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 100, damping: 20, duration: 1 }}
                 whileHover={{ scale: 1.05, rotate: 5 }}
-                className="w-56 h-56 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-[#386641] dark:border-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-white/5 relative z-10 cursor-pointer"
+                className="w-56 h-56 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-[#386641] dark:border-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-white/5 relative z-10 cursor-pointer dust-overlay spider-web-tr"
               >
+                <div className="dust-layer rounded-full"></div>
                 <img
                   src={PERSONAL_INFO.avatar}
                   alt={PERSONAL_INFO.fullName}
@@ -507,6 +518,7 @@ ${form.message}`
 
         </motion.div>
       </section>
+      
 
       {/* About Section */}
       <section id="about" className={`py-32 px-4 transition-colors duration-1000 ${isDarkMode ? 'bg-[#222]' : 'bg-[#f5ead5]'}`}>
@@ -557,7 +569,8 @@ ${form.message}`
             transition={{ duration: 0.8 }}
             className="grid grid-cols-1 gap-10"
           >
-            <div className="bg-[#386641] text-[#FDF5E6] p-10 rounded-sm shadow-2xl vintage-texture border-4 border-[#386641] dark:bg-retro-dark dark:border-white transform md:rotate-2 hover:rotate-0 transition-transform duration-500">
+            <div className="bg-[#386641] text-[#FDF5E6] p-10 rounded-sm shadow-2xl vintage-texture border-4 border-[#386641] dark:bg-retro-dark dark:border-white transform md:rotate-2 hover:rotate-0 transition-transform duration-500 dust-overlay spider-web-tl relative">
+              <div className="dust-layer"></div>
               <h3 className="text-3xl font-black uppercase mb-8 flex items-center gap-4">
                 <Code2 className="w-10 h-10" /> Kỹ năng chính
               </h3>
@@ -574,7 +587,8 @@ ${form.message}`
               </div>
             </div>
 
-            <div className="bg-white dark:bg-[#333] p-10 rounded-sm shadow-2xl vintage-texture border-4 border-[#386641] dark:border-white transform md:-rotate-1 hover:rotate-0 transition-transform duration-500">
+            <div className="bg-white dark:bg-[#333] p-10 rounded-sm shadow-2xl vintage-texture border-4 border-[#386641] dark:border-white transform md:-rotate-1 hover:rotate-0 transition-transform duration-500 dust-overlay crack-bl relative">
+              <div className="dust-layer"></div>
               <h3 className="text-3xl font-black uppercase mb-8 flex items-center gap-4 text-[#bc4749]">
                 <Award className="w-10 h-10" /> Thành tựu
               </h3>
@@ -599,6 +613,7 @@ ${form.message}`
 
       {/* Projects Section */}
       <section id="projects" className="py-32 px-4 relative">
+        <div className="bg-web-large" style={{ top: '0%', left: '-10%', transform: 'scale(1.0)' }} />
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
             <motion.div
@@ -638,7 +653,7 @@ ${form.message}`
             viewport={{ once: true }}
             className="mb-20"
           >
-            <RetroSign variant="secondary" className="border-[6px] shadow-2xl">
+            <RetroSign variant="secondary" className="border-[6px] shadow-2xl crack-br">
               <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter">
                 Kinh Nghiệm & Học Vấn
               </h2>
@@ -670,7 +685,8 @@ ${form.message}`
                   className="absolute left-[14px] top-4 w-7 h-7 bg-[#bc4749] rounded-full border-[6px] border-[#FDF5E6] dark:border-[#1a1a1a] z-10 shadow-lg group-hover:scale-125 transition-transform"
                 />
 
-                <div className="bg-white dark:bg-[#333] p-10 shadow-2xl border-4 border-[#386641] dark:border-white rounded-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)]">
+                <div className={`bg-white dark:bg-[#333] p-10 shadow-2xl border-4 border-[#386641] dark:border-white rounded-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)] dust-overlay relative ${index % 2 === 0 ? "spider-web-tr" : ""}`}>
+                  <div className="dust-layer"></div>
                   <div className="flex flex-wrap justify-between items-center gap-6 mb-6">
                     <h3 className="text-3xl font-black uppercase text-[#386641] dark:text-white group-hover:text-[#bc4749] transition-colors">
                       {exp.company}
@@ -760,7 +776,7 @@ ${form.message}`
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <RetroSign className="mb-12 border-[6px] shadow-2xl" noneRow>
+              <RetroSign className="mb-12 border-[6px] shadow-2xl spider-web-tl" noneRow>
                 <h2 className="text-5xl md:text-7xl font-black uppercase mb-6 tracking-tighter retro-3d-text">
                   Liên Hệ <span className="text-white">Ngay</span>
                 </h2>
@@ -770,7 +786,8 @@ ${form.message}`
               </RetroSign>
 
               <div className="space-y-8 mt-16">
-                <motion.div whileHover={{ x: 15 }} className="flex items-center gap-8 p-6 bg-white/50 dark:bg-black/40 border-4 border-[#386641]/20 hover:border-[#386641] dark:hover:border-white transition-all group shadow-xl backdrop-blur-md">
+                <motion.div whileHover={{ x: 15 }} className="flex items-center gap-8 p-6 bg-white/50 dark:bg-black/40 border-4 border-[#386641]/20 hover:border-[#386641] dark:hover:border-white transition-all group shadow-xl backdrop-blur-md dust-overlay crack-bl relative">
+                  <div className="dust-layer"></div>
                   <div className="p-5 bg-[#386641] text-white rounded-sm shadow-lg transform group-hover:rotate-12 transition-transform">
                     <Mail className="w-8 h-8" />
                   </div>
@@ -780,7 +797,8 @@ ${form.message}`
                   </div>
                 </motion.div>
 
-                <motion.div whileHover={{ x: 15 }} className="flex items-center gap-8 p-6 bg-white/50 dark:bg-black/40 border-4 border-[#386641]/20 hover:border-[#386641] dark:hover:border-white transition-all group shadow-xl backdrop-blur-md">
+                <motion.div whileHover={{ x: 15 }} className="flex items-center gap-8 p-6 bg-white/50 dark:bg-black/40 border-4 border-[#386641]/20 hover:border-[#386641] dark:hover:border-white transition-all group shadow-xl backdrop-blur-md dust-overlay spider-web-tr relative">
+                  <div className="dust-layer"></div>
                   <div className="p-5 bg-[#bc4749] text-white rounded-sm shadow-lg transform group-hover:-rotate-12 transition-transform">
                     <Phone className="w-8 h-8" />
                   </div>

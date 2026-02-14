@@ -18,7 +18,8 @@ const RetroSign: React.FC<RetroSignProps> = ({ children, className = "", variant
     : 'border-[#FDF5E6]';
 
   return (
-    <div className={`relative p-8 border-4 shadow-xl vintage-texture transition-all ${containerClasses} rounded-sm ${className}`}>
+    <div className={`relative p-8 border-4 shadow-xl vintage-texture dust-overlay transition-all ${containerClasses} rounded-sm ${className}`}>
+      <div className="dust-layer"></div>
       {/* Decorative corners */}
       <div className={`absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 ${decorationClasses}`}></div>
       <div className={`absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 ${decorationClasses}`}></div>
