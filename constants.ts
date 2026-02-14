@@ -22,7 +22,7 @@ export const PROJECTS: Project[] = [
     tech: ["React", "TypeScript", "Spring Boot"],
     demoUrl: "https://tranminhphu7425.github.io/quiz-universe/#/",
     githubUrl: "https://github.com/tranminhphu7425/quiz-universe",
-    imageUrl: "public/uploads/QuizUniverse.png",
+    imageUrl: "uploads/QuizUniverse.png",
   },
   {
     id: "graph-builder",
@@ -31,7 +31,7 @@ export const PROJECTS: Project[] = [
     tech: ["React"],
     demoUrl: "https://tranminhphu7425.id.vn/",
     githubUrl: "https://github.com/tranminhphu7425/graphbuilder",
-    imageUrl: "public/uploads/GraphBuilder.png",
+    imageUrl: "uploads/GraphBuilder.png",
   },
   {
     id: "SportBooking",
@@ -40,7 +40,7 @@ export const PROJECTS: Project[] = [
     tech: ["React", "NodeJS"],
     demoUrl: "https://github.com/tranminhphu7425/badminton-court-booking",
     githubUrl: "https://github.com/tranminhphu7425/badminton-court-booking",
-    imageUrl: "public/uploads/SportBooking.png",
+    imageUrl: "uploads/SportBooking.png",
   }
 ];
 
