@@ -18,7 +18,8 @@ import {
   ArrowRight,
   Sparkles,
   ChevronRight,
-  Send
+  Send,
+  ArrowDown
 } from 'lucide-react';
 import {
   motion,
@@ -32,13 +33,11 @@ import {
 import { PERSONAL_INFO, PROJECTS, SKILLS, EXPERIENCES, ACHIEVEMENTS } from './constants';
 import RetroSign from './components/RetroSign';
 
-// --- Types ---
 interface MagneticProps {
   children: React.ReactNode;
   strength?: number;
 }
 
-// --- Components ---
 
 const Magnetic: React.FC<MagneticProps> = ({ children, strength = 40 }) => {
   const x = useMotionValue(0);
@@ -307,7 +306,7 @@ const App: React.FC = () => {
             className="text-2xl font-black uppercase tracking-tighter retro-shadow text-[#bc4749] flex items-center gap-2 cursor-pointer"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <Sparkles className="w-7 h-7 animate-pulse" /> MINH PHÚ
+             PHU'S PORTFOLIO
           </motion.div>
 
           <div className="hidden md:flex items-center space-x-1">
@@ -391,19 +390,21 @@ const App: React.FC = () => {
         </div>
 
         <div className="max-w-5xl w-full z-10">
+          <RetroSign>
           <motion.div
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="flex flex-col items-center"
+            className="flex flex-col lg:flex-row-reverse items-center "
           >
+           
             <div className="relative mb-12">
               <motion.div
                 initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 100, damping: 20, duration: 1 }}
                 whileHover={{ scale: 1.05, rotate: 5 }}
-                className="w-56 h-56 md:w-80 md:h-80 rounded-full overflow-hidden border-[12px] border-[#386641] dark:border-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-white/5 relative z-10 cursor-pointer"
+                className="w-56 h-56 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-[#386641] dark:border-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-white/5 relative z-10 cursor-pointer"
               >
                 <img
                   src={PERSONAL_INFO.avatar}
@@ -418,7 +419,7 @@ const App: React.FC = () => {
               />
             </div>
 
-            <RetroSign className="w-full md:max-w-4xl border-[6px] shadow-2xl">
+            <div className="w-full md:max-w-4xl border-[6px] shadow-2xl md:border-none md:shadow-none">
               <motion.h1
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -431,7 +432,7 @@ const App: React.FC = () => {
                 initial={{ width: 0 }}
                 animate={{ width: 100 }}
                 transition={{ delay: 1, duration: 1 }}
-                className="h-2 bg-[#bc4749] mb-8"
+                className="h-2 bg-[#bc4749] mb-8 w-100" 
               />
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
@@ -463,8 +464,9 @@ const App: React.FC = () => {
                   </a>
                 </Magnetic>
               </div>
-            </RetroSign>
+            </div>
           </motion.div>
+          </RetroSign>
         </div>
 
         {/* Scroll Indicator */}
@@ -474,7 +476,8 @@ const App: React.FC = () => {
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50"
         >
           <span className="text-[10px] uppercase font-black tracking-widest">Cuộn xuống</span>
-          <div className="w-0.5 h-10 bg-[#386641] dark:bg-white origin-top" />
+          <ArrowDown className="w-4 h-4 opacity-70" />
+
         </motion.div>
       </section>
 
@@ -902,7 +905,7 @@ const App: React.FC = () => {
                 className="absolute inset-0 border-4 border-white rounded-full"
                 style={{
                   pathLength: scrollYProgress,
-                  clipPath: `inset(${(1 - scrollYProgress.get()) * 100}% 0 0 0)` // Simplified visual indicator
+                  clipPath: `inset(${(1 - scrollYProgress.get()) * 100}% 0 0 0)` 
                 }}
               />
               <ArrowRight className="w-8 h-8 -rotate-90 group-hover:-translate-y-1 transition-transform" />
