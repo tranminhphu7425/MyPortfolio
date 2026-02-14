@@ -419,21 +419,23 @@ const App: React.FC = () => {
               />
             </div>
 
-            <div className="w-full md:max-w-4xl border-[6px] shadow-2xl md:border-none md:shadow-none">
+            <div className="w-full md:max-w-4xl ">
               <motion.h1
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-5xl md:text-8xl font-black uppercase mb-4 tracking-tight retro-3d-text"
+                className="text-5xl md:text-7xl font-black uppercase mb-4 tracking-tight retro-3d-text"
               >
                 {PERSONAL_INFO.displayName}
               </motion.h1>
-              <motion.div
+            
+                <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: 100 }}
                 transition={{ delay: 1, duration: 1 }}
-                className="h-2 bg-[#bc4749] mb-8 w-100" 
+                className="h-2 bg-[#bc4749] mb-8 d-inline mx-auto" 
               />
+              
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
