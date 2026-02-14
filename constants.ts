@@ -40,7 +40,7 @@ export const PROJECTS: Project[] = [
     tech: ["React", "NodeJS"],
     demoUrl: "https://github.com/tranminhphu7425/badminton-court-booking",
     githubUrl: "https://github.com/tranminhphu7425/badminton-court-booking",
-    imageUrl: "https://picsum.photos/seed/badminton/800/600",
+    imageUrl: "SportBooking.png",
   }
 ];
 
