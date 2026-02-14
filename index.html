@@ -29,6 +29,7 @@
   <style>
     body {
       font-family: 'Be Vietnam Pro', sans-serif;
+      overflow-x: hidden;
     }
 
     .retro-border {
@@ -63,29 +64,72 @@
       z-index: 10;
     }
 
-    /* Fix transition flickers */
-    * {
-      transition-property: background-color, border-color, color, fill, stroke;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 300ms;
+    .grain {
+      position: fixed;
+      top: -150%;
+      left: -150%;
+      height: 300%;
+      width: 300%;
+      background-image: url("https://www.transparenttextures.com/patterns/p6-polka.png");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+      animation: grain 8s steps(10) infinite;
+    }
+
+    @keyframes grain {
+      0%, 100% { transform:translate(0, 0); }
+      10% { transform:translate(-5%, -10%); }
+      20% { transform:translate(-15%, 5%); }
+      30% { transform:translate(7%, -25%); }
+      40% { transform:translate(-5%, 25%); }
+      50% { transform:translate(-15%, 10%); }
+      60% { transform:translate(15%, 0%); }
+      70% { transform:translate(0%, 15%); }
+      80% { transform:translate(3%, 35%); }
+      90% { transform:translate(-10%, 10%); }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FDF5E6;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #bc4749;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #386641;
+    }
+
+    /* Hide horizontal overflow during animations */
+    .motion-container {
+      overflow-x: hidden;
+      width: 100%;
     }
   </style>
-  
 
   <script type="importmap">
     {
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
-    "framer-motion": "https://esm.sh/framer-motion@^12.34.0"
-  }
-}
-</script>
+      "imports": {
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "react": "https://esm.sh/react@^19.2.4",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
+        "framer-motion": "https://esm.sh/framer-motion@^12.34.0"
+      }
+    }
+  </script>
 </head>
 
-<body class="bg-retro-cream text-retro-green dark:bg-retro-dark dark:text-retro-cream">
+<body class="bg-retro-cream text-retro-green dark:bg-retro-dark dark:text-retro-cream transition-colors duration-500">
+  <div class="grain"></div>
   <div id="root"></div>
 </body>
 
