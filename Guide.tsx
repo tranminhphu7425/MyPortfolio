@@ -107,28 +107,28 @@ const Guide: React.FC = () => {
         {/* Article Body */}
         <article className="prose prose-lg dark:prose-invert max-w-none 
           prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight 
-          prose-h3:text-2xl prose-h3:text-[#bc4749] prose-h3:mt-12 prose-h3:mb-6
+          prose-h3:text-2xl prose-h3:text-[#bc4749] prose-h3:mt-14 prose-h3:mb-6
           prose-h4:text-xl prose-h4:text-[#386641] dark:prose-h4:text-[#6a994e] prose-h4:mt-10 prose-h4:mb-4
-          prose-p:text-gray-800 dark:prose-p:text-gray-200 prose-p:font-medium prose-p:leading-relaxed
-          prose-li:text-gray-800 dark:prose-li:text-gray-200 prose-li:font-medium
+          prose-p:text-gray-800 dark:prose-p:text-gray-200 prose-p:font-medium prose-p:leading-[1.8] prose-p:mb-8 text-justify
+          prose-li:text-gray-800 dark:prose-li:text-gray-200 prose-li:font-medium prose-li:leading-[1.8]
           prose-a:text-[#bc4749] hover:prose-a:text-[#386641] prose-a:font-bold prose-a:transition-colors
           prose-strong:font-black prose-strong:text-[#386641] dark:prose-strong:text-[#bc4749]">
 
-          <p className="text-xl border-4 border-[#386641]/20 p-6 bg-white/50 dark:bg-black/30 backdrop-blur-sm shadow-xl rounded-sm mb-12 relative overflow-hidden dust-overlay">
+          <div className="text-xl leading-[1.8] border-4 border-[#386641]/20 p-8 bg-white/50 dark:bg-black/30 backdrop-blur-sm shadow-xl rounded-sm mb-12 relative overflow-hidden dust-overlay text-justify">
             <div className="dust-layer"></div>
-            Hiện tại, thông qua khóa học "AI Fundamentals" của Google trên nền tảng Coursera, bạn có thể nhận được đặc quyền dùng thử <strong>3 tháng Google AI Pro hoàn toàn miễn phí</strong>. Gói này cung cấp cho bạn quyền truy cập vào các mô hình AI mới nhất của Google (Gemini) và 2TB dung lượng lưu trữ.
-          </p>
+            <p className="!m-0">Hiện tại, thông qua khóa học "AI Fundamentals" của Google trên nền tảng Coursera, bạn có thể nhận được đặc quyền dùng thử <strong>3 tháng Google AI Pro hoàn toàn miễn phí</strong>. Gói này cung cấp cho bạn quyền truy cập vào các mô hình AI mới nhất của Google (Gemini) và 2TB dung lượng lưu trữ.</p>
+          </div>
 
-          <h3 className="flex items-center gap-3"><CheckCircle2 className="w-8 h-8" /> Yêu cầu chuẩn bị:</h3>
-          <ol className="list-decimal pl-6 space-y-3 marker:text-[#bc4749] marker:font-black">
+          <h3 className="flex items-center gap-3 text-2xl mb-2"><CheckCircle2 className="w-8 h-8" /> Yêu cầu chuẩn bị:</h3>
+          <ol className="list-decimal pl-6 space-y-5 marker:text-[#bc4749] marker:font-black">
             <li>Một tài khoản Google (Gmail) để nhận ưu đãi.</li>
             <li>Thẻ thanh toán quốc tế (Visa/Mastercard) có sẵn một số tiền nhỏ (khoảng 1$) để xác minh thẻ (hệ thống sẽ tự động hoàn lại khoản này).</li>
           </ol>
 
-          <h3 className="flex items-center gap-3"><Info className="w-8 h-8" /> Các bước thực hiện:</h3>
+          <h3 className="flex items-center gap-3 text-2xl mb-2 mt-2"><Info className="w-8 h-8" /> Các bước thực hiện:</h3>
 
           <h4>Bước 1: Đăng ký tài khoản và kích hoạt dùng thử Coursera (7 ngày)</h4>
-          <ul className="list-disc pl-6 space-y-3 marker:text-[#386641] dark:marker:text-[#6a994e]">
+          <ul className="list-disc pl-6 space-y-5 marker:text-[#386641] dark:marker:text-[#6a994e]">
             <li>Truy cập trang chủ <a href="https://www.coursera.org/" target="_blank" rel="noreferrer noopener external">www.coursera.org</a>.</li>
             <li>Tạo một tài khoản mới (hoặc đăng nhập nếu bạn đã có).</li>
             <li>Bấm vào nút <strong>Start 7-day Free Trial</strong> (Bắt đầu 7 ngày dùng thử miễn phí).</li>
@@ -139,7 +139,7 @@ const Guide: React.FC = () => {
           </div>
 
           <h4>Bước 2: Tìm và tham gia khóa học Google AI</h4>
-          <ul className="list-disc pl-6 space-y-3 marker:text-[#386641] dark:marker:text-[#6a994e]">
+          <ul className="list-disc pl-6 space-y-5 marker:text-[#386641] dark:marker:text-[#6a994e]">
             <li>Sử dụng thanh tìm kiếm của Coursera, tìm từ khóa <strong>“AI Fundamentals”</strong> (khóa học do Google cung cấp).</li>
             <li>Bấm tham gia (Enroll) vào khóa học này.</li>
           </ul>
@@ -148,7 +148,7 @@ const Guide: React.FC = () => {
           </div>
 
           <h4>Bước 3: Tìm đến phần nhận thưởng ở Module 2</h4>
-          <ul className="list-disc pl-6 space-y-3 marker:text-[#386641] dark:marker:text-[#6a994e]">
+          <ul className="list-disc pl-6 space-y-5 marker:text-[#386641] dark:marker:text-[#6a994e]">
             <li>Trong giao diện của khóa học, nhìn sang thanh menu bên trái, chọn <strong>Module 2</strong>.</li>
             <li>Tại mục <em>Practice using AI</em>, bạn sẽ thấy các bài học. Hãy click vào mục có tên “<strong>Complete labs with Google AI Pro at no cost</strong>” và làm theo hướng dẫn để hoàn thành bài học này, sao đó sẽ mở khoá được bài học tiếp theo là: <strong>Redeem your Google AI Pro trial</strong> (Đổi bản dùng thử Google AI Pro của bạn).</li>
           </ul>
@@ -157,7 +157,7 @@ const Guide: React.FC = () => {
           </div>
 
           <h4>Bước 4: Kích hoạt ưu đãi</h4>
-          <ul className="list-disc pl-6 space-y-3 marker:text-[#386641] dark:marker:text-[#6a994e]">
+          <ul className="list-disc pl-6 space-y-5 marker:text-[#386641] dark:marker:text-[#6a994e]">
             <li>Giao diện bên phải sẽ hiện ra thông tin chi tiết về gói 3 tháng dùng thử.</li>
             <li>Bạn kéo xuống dưới cùng, tích chọn vào ô: <strong>“I agree to use this app responsibly”</strong> (Tôi đồng ý sử dụng ứng dụng này một cách có trách nhiệm).</li>
             <li>Sau đó, bấm vào nút xanh <strong>Launch App</strong> (Mở ứng dụng).</li>
@@ -165,7 +165,7 @@ const Guide: React.FC = () => {
           <div className="my-8 p-2 border-4 border-[#386641] dark:border-white shadow-2xl bg-white dark:bg-[#1a1a1a]">
             <img src="/guide/Redeem-your-Google-AI-Pro-trial (1).png" alt="Launch App" className="w-full h-auto  hover:grayscale-0 transition-all duration-500" />
           </div>
-          <ul className="list-disc pl-6 space-y-3 marker:text-[#386641] dark:marker:text-[#6a994e]">
+          <ul className="list-disc pl-6 space-y-5 marker:text-[#386641] dark:marker:text-[#6a994e]">
             <li>Trình duyệt sẽ chuyển hướng bạn sang trang của Google. Tại đây, hãy làm theo các bước trên màn hình, xác nhận phương thức thanh toán của Google (sẽ hiển thị 0đ cho 3 tháng đầu tiên) để hoàn tất kích hoạt.</li>
           </ul>
           <div className="my-8 grid md:grid-cols-2 gap-6">
@@ -181,13 +181,13 @@ const Guide: React.FC = () => {
             <AlertTriangle className="w-6 h-6" /> Bước 5: Hủy gia hạn để tránh mất tiền (RẤT QUAN TRỌNG)
           </h4>
           <p>Sau khi đã chắc chắn tài khoản Google của bạn được nâng cấp lên gói 3 tháng Pro thành công, bạn cần làm 2 việc sau để không bị trừ tiền oan:</p>
-          <ol className="list-decimal pl-6 space-y-3 marker:text-[#bc4749] marker:font-black">
+          <ol className="list-decimal pl-6 space-y-5 marker:text-[#bc4749] marker:font-black">
             <li><strong>Hủy gia hạn Coursera:</strong> Quay lại trang Coursera, click vào Avatar ở góc trên bên phải &gt; Thanh toán (My Purchases) và chọn <strong>Cancel Subscription</strong> gói 7 ngày dùng thử.</li>
           </ol>
           <div className="my-8 p-2 border-4 border-[#386641] dark:border-white shadow-2xl bg-white dark:bg-[#1a1a1a] transform rotate-1 hover:rotate-0 transition-transform">
             <img src="/guide/Coursera-Cancel-Subscription-102.png" alt="Cancel Subscription" className="w-full h-auto  hover:grayscale-0 transition-all duration-500" />
           </div>
-          <ol start={2} className="list-decimal pl-6 space-y-3 marker:text-[#bc4749] marker:font-black">
+          <ol start={2} className="list-decimal pl-6 space-y-5 marker:text-[#bc4749] marker:font-black">
             <li><strong>Hủy gia hạn Google One:</strong> Vào trang quản lý của Google One (hoặc Google Play), chọn hủy gia hạn gói Google AI Pro.</li>
           </ol>
 
@@ -199,7 +199,7 @@ const Guide: React.FC = () => {
           </div>
 
           <h3 className="flex items-center gap-3"><Info className="w-8 h-8" /> Một số lưu ý về điều kiện áp dụng (Eligibility):</h3>
-          <ul className="list-disc pl-6 space-y-3 marker:text-[#386641] dark:marker:text-[#6a994e]">
+          <ul className="list-disc pl-6 space-y-5 marker:text-[#386641] dark:marker:text-[#6a994e]">
             <li><strong>Thời hạn đổi mã:</strong> Mã ưu đãi phải được kích hoạt trước ngày <strong>01/01/2027</strong>.</li>
             <li><strong>Tài khoản hợp lệ:</strong> Ưu đãi này thường áp dụng cho tài khoản mới hoặc người dùng Google One hiện tại chưa từng dùng các gói tương đương hoặc cao hơn. Không áp dụng cho các tài khoản đang nằm trong gói Gia đình (Family) mà không phải là quản trị viên, hoặc các tài khoản Google Workspace (tài khoản doanh nghiệp/giáo dục).</li>
             <li>Không thể cộng dồn với các ưu đãi Google One khác.</li>
