@@ -733,27 +733,46 @@ ${form.message}`
           </div>
 
           <div className="grid md:grid-cols-2 gap-16">
-            {[1, 2].map((i) => (
+            {[
+              {
+                id: 1,
+                date: "25/02/2026",
+                category: "AI • Thủ thuật",
+                title: "Hướng dẫn nhận 3 tháng Google AI Pro miễn phí",
+                desc: "Thông qua khóa học của Google trên Coursera, bạn sẽ nhận được đặc quyền dùng thử 3 tháng Gemini Advanced + 2TB Google Drive hoàn toàn miễn phí.",
+                href: "#guide",
+                target: "_self"
+              },
+              {
+                id: 2,
+                date: new Date().toLocaleDateString('vi-VN'),
+                category: "Công nghệ • AI",
+                title: "Trang Blog Phú Làm Công Nghệ",
+                desc: "Với vai trò GSA, mình tập trung truyền đạt cách ứng dụng AI vào học tập, nghiên cứu, lập trình và công việc thực tế — giúp bạn làm nhanh hơn, hiểu sâu hơn...",
+                href: "https://www.facebook.com/phulamcongnghe",
+                target: "_blank"
+              }
+            ].map((post, i) => (
               <motion.div
-                key={i}
+                key={post.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
                 className="flex gap-10 border-b-4 border-[#386641]/20 pb-12 group cursor-pointer hover:border-[#bc4749] transition-all"
               >
-                <div className="hidden sm:block text-7xl font-black text-[#bc4749]/10 group-hover:text-[#bc4749]/40 transition-all transform group-hover:-rotate-12">0{i}</div>
+                <div className="hidden sm:block text-7xl font-black text-[#bc4749]/10 group-hover:text-[#bc4749]/40 transition-all transform group-hover:-rotate-12">0{i + 1}</div>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 text-xs font-black text-[#386641] dark:text-[#6a994e] uppercase tracking-widest">
-                    <BookOpen className="w-4 h-4" /> Công nghệ • AI • {new Date().toLocaleDateString('vi-VN')}
+                    <BookOpen className="w-4 h-4" /> {post.category} • {post.date}
                   </div>
-                  <h3 className="text-3xl font-black uppercase group-hover:text-[#bc4749] transition-all leading-tight">Trang Blog Phú Làm Công Nghệ</h3>
-                  <p className="text-base line-clamp-3 text-gray-800 dark:text-white font-semibold leading-relaxed">Với vai trò GSA, mình tập trung truyền đạt cách ứng dụng AI vào học tập, nghiên cứu, lập trình và công việc thực tế — giúp bạn làm nhanh hơn, hiểu sâu hơn và tận dụng công nghệ thông minh hơn mỗi ngày</p>
+                  <h3 className="text-3xl font-black uppercase group-hover:text-[#bc4749] transition-all leading-tight">{post.title}</h3>
+                  <p className="text-base line-clamp-3 text-gray-800 dark:text-white font-semibold leading-relaxed">{post.desc}</p>
                   <Magnetic strength={15}>
                     <a
-                      href="https://www.facebook.com/phulamcongnghe"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={post.href}
+                      target={post.target}
+                      {...(post.target === "_blank" ? { rel: "noopener noreferrer" } : {})}
                       className="inline-flex items-center gap-3 font-black uppercase text-xs tracking-[0.3em] hover:gap-6 transition-all hover:text-[#bc4749]"
                     >
                       Đọc thêm <ArrowRight className="w-5 h-5" />
