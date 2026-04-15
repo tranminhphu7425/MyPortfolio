@@ -7,7 +7,7 @@ export const PERSONAL_INFO = {
   role: "IT Developer",
   tagline: "Người ham học hỏi, kết hợp tư duy logic với sáng tạo để không ngừng hoàn thiện bản thân.",
   avatar: "uploads/gsa-vn26-1fd3a643-0f49-4fa2-9f74-ba42982986c2.jpg",
-  cvUrl: "https://www.facebook.com/tranphu.152/",
+  cvUrl: "uploads/MyCV.pdf",
   email: "tranminhphu7.4.2005@gmail.com",
   phone: "0818768940",
   github: "https://github.com/tranminhphu7425",

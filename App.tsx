@@ -396,6 +396,7 @@ ${form.message}`
                 href={PERSONAL_INFO.cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                download
                 className="bg-[#bc4749] text-white px-6 py-2.5 rounded-sm font-black uppercase text-[10px] tracking-widest hover:bg-[#a53b3d] transition-all flex items-center gap-2 shadow-lg hover:shadow-red-500/20 active:scale-95"
               >
                 <Download className="w-4 h-4" /> CV
