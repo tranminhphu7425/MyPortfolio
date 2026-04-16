@@ -34,6 +34,15 @@ export const PROJECTS: Project[] = [
     imageUrl: "uploads/GraphBuilder.png",
   },
   {
+    id: "meeting-room-booking-system",
+    title: "Meeting Room Booking System",
+    description: "Hệ thống quản lý và đặt phòng họp trực tuyến, giúp tối ưu hóa việc sử dụng không gian làm việc trong doanh nghiệp.",
+    tech: ["PHP", "PostgreSQL", "Bootstrap 5"],
+    demoUrl: "https://github.com/tranminhphu7425/MeetingRoomBookingSystem",
+    githubUrl: "https://github.com/tranminhphu7425/MeetingRoomBookingSystem",
+    imageUrl: "uploads/MeetingRoomBookingSystem.png",
+  },
+  {
     id: "SportBooking",
     title: "SportBooking",
     description: "Đặt sân thể thao trực tuyến, hỗ trợ ứng dụng cho cả người đặt sân, người cung cấp dịch vụ sân, và cả admin quản lý hệ thống.",
@@ -41,7 +50,9 @@ export const PROJECTS: Project[] = [
     demoUrl: "https://github.com/tranminhphu7425/badminton-court-booking",
     githubUrl: "https://github.com/tranminhphu7425/badminton-court-booking",
     imageUrl: "uploads/SportBooking.png",
-  }
+  },
+  
+  
 ];
 
 export const SKILLS: Skill[] = [

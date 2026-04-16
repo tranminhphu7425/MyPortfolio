@@ -407,7 +407,7 @@ ${form.message}`
       </motion.nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative pt-32 pb-20 px-4 flex flex-col items-center justify-center overflow-hidden min-h-screen">
+      <section id="home" className="relative pt-32 pb-20 px-4 flex flex-col items-center justify-center overflow-hidden min-h-[80vh]">
         {/* Abstract Background Shapes */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
