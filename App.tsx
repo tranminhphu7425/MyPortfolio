@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Github,
   Facebook,
@@ -12,15 +11,15 @@ import {
   Code2,
   Award,
   Briefcase,
-  User,
   BookOpen,
-  MessageSquare,
   ArrowRight,
   Sparkles,
   ChevronRight,
   Send,
   ArrowDown,
-  Link
+  Trophy,
+  Star,
+  Globe
 } from 'lucide-react';
 import {
   motion,
@@ -32,13 +31,14 @@ import {
   useMotionValue
 } from 'framer-motion';
 import { PERSONAL_INFO, PROJECTS, SKILLS, EXPERIENCES, ACHIEVEMENTS } from './constants';
+import { Language, getText } from './types';
+import { TRANSLATIONS } from './translations';
 import RetroSign from './components/RetroSign';
 
 interface MagneticProps {
   children: React.ReactNode;
   strength?: number;
 }
-
 
 const Magnetic: React.FC<MagneticProps> = ({ children, strength = 40 }) => {
   const x = useMotionValue(0);
@@ -76,16 +76,30 @@ const Typewriter = ({ text }: { text: string }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    setDisplayText("");
+    setIndex(0);
+  }, [text]);
+
+  useEffect(() => {
     if (index < text.length) {
       const timeout = setTimeout(() => {
         setDisplayText((prev) => prev + text[index]);
         setIndex((prev) => prev + 1);
-      }, 50);
+      }, 40);
       return () => clearTimeout(timeout);
     }
   }, [index, text]);
 
-  return <span>{displayText}<motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 0.8 }} className="inline-block w-1 h-5 ml-1 bg-[#bc4749] align-middle" /></span>;
+  return (
+    <span>
+      {displayText}
+      <motion.span
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ repeat: Infinity, duration: 0.8 }}
+        className="inline-block w-1 h-5 ml-1 bg-[#bc4749] align-middle"
+      />
+    </span>
+  );
 };
 
 const Counter = ({ value, duration = 2 }: { value: number; duration?: number }) => {
@@ -115,9 +129,8 @@ const Counter = ({ value, duration = 2 }: { value: number; duration?: number }) 
   return <span ref={ref}>{count}</span>;
 };
 
-const ProjectCard = ({ key, project, index }: { key: any; project: any; index: number }) => {
+const ProjectCard = ({ project, index, language }: { project: any; index: number; language: Language }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  // Assign variety based on index
   const effectClass = index % 3 === 0 ? "crack-br" : index % 3 === 1 ? "spider-web-tl" : "";
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -140,7 +153,6 @@ const ProjectCard = ({ key, project, index }: { key: any; project: any; index: n
 
   return (
     <motion.div
-      key={project.id}
       ref={cardRef}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -166,14 +178,7 @@ const ProjectCard = ({ key, project, index }: { key: any; project: any; index: n
                 href={project.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center
-      p-3 rounded-full
-      text-white
-      bg-white/10 backdrop-blur-md
-      border border-white/20
-      transition-all duration-300
-      hover:text-[#bc4749]
-      hover:scale-110 active:scale-95"
+                className="inline-flex items-center justify-center p-3 rounded-full text-white bg-white/10 backdrop-blur-md border border-white/20 transition-all duration-300 hover:text-[#bc4749] hover:scale-110 active:scale-95"
               >
                 <ExternalLink className="w-5 h-5" />
               </a>
@@ -184,20 +189,12 @@ const ProjectCard = ({ key, project, index }: { key: any; project: any; index: n
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center
-      p-3 rounded-full
-      text-white
-      bg-white/10 backdrop-blur-md
-      border border-white/20
-      transition-all duration-300
-      hover:text-[#bc4749]
-      hover:scale-110 active:scale-95"
+                className="inline-flex items-center justify-center p-3 rounded-full text-white bg-white/10 backdrop-blur-md border border-white/20 transition-all duration-300 hover:text-[#bc4749] hover:scale-110 active:scale-95"
               >
                 <Github className="w-5 h-5" />
               </a>
             </Magnetic>
           </div>
-
         </div>
       </div>
 
@@ -209,7 +206,7 @@ const ProjectCard = ({ key, project, index }: { key: any; project: any; index: n
           <ChevronRight className="w-6 h-6 text-[#386641] dark:text-white transform group-hover:translate-x-2 transition-transform" />
         </div>
         <p className="text-sm mb-6 flex-grow leading-relaxed text-gray-800 dark:text-gray-100 font-medium">
-          {project.description}
+          {getText(project.description, language)}
         </p>
         <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-gray-100 dark:border-white/10">
           {project.tech.map((t: string, i: number) => (
@@ -225,6 +222,7 @@ const ProjectCard = ({ key, project, index }: { key: any; project: any; index: n
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [language, setLanguage] = useState<Language>('vi');
   const [activeTab, setActiveTab] = useState('home');
   const [scrolled, setScrolled] = useState(false);
   const [form, setForm] = useState({
@@ -233,41 +231,51 @@ const App: React.FC = () => {
     message: ""
   });
 
-  const handleChange = (e) => {
+  const t = TRANSLATIONS[language];
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem('language') as Language;
+    if (savedLang === 'vi' || savedLang === 'en') {
+      setLanguage(savedLang);
+    }
+  }, []);
+
+  const handleSetLanguage = (lang: Language) => {
+    setLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
+
+  const toggleLanguage = () => {
+    const next = language === 'vi' ? 'en' : 'vi';
+    handleSetLanguage(next);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const subject = encodeURIComponent("Liên hệ từ website");
+    const subject = encodeURIComponent(t.contact.emailSubject);
     const body = encodeURIComponent(
-      `Tên: ${form.name}
-Email: ${form.email}
-Nội dung:
-${form.message}`
+      `${t.contact.emailBodyName}: ${form.name}\n${t.contact.emailBodyEmail}: ${form.email}\n${t.contact.emailBodyMessage}:\n${form.message}`
     );
 
-    window.location.href = `mailto:youremail@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${PERSONAL_INFO.email}?subject=${subject}&body=${body}`;
   };
-
-
-
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-
-  const navbarY = useTransform(scrollYProgress, [0, 0.05], [0, -5]);
   const navbarPadding = useTransform(scrollYProgress, [0, 0.05], ["1rem", "0.75rem"]);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      // Update active section based on scroll
       const sections = ['home', 'about', 'projects', 'blog', 'contact'];
       for (const section of sections) {
         const el = document.getElementById(section);
@@ -303,20 +311,12 @@ ${form.message}`
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2 }
-    }
-  };
-
   const navItems = [
-    { id: 'home', label: 'Trang chủ' },
-    { id: 'about', label: 'Về tôi' },
-    { id: 'projects', label: 'Dự án' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'contact', label: 'Liên hệ' },
+    { id: 'home', label: t.nav.home },
+    { id: 'about', label: t.nav.about },
+    { id: 'projects', label: t.nav.projects },
+    { id: 'blog', label: t.nav.blog },
+    { id: 'contact', label: t.nav.contact },
   ];
 
   return (
@@ -324,10 +324,7 @@ ${form.message}`
 
       {/* Large Background Effects */}
       <div className="bg-web-large" style={{ top: '5%', left: '-5%', transform: 'rotate(180deg)', opacity: 0.6 }} />
-      {/* <div className="bg-crack-large" style={{ top: '25%', right: '-15%', transform: 'rotate(45deg)' }} /> */}
-      
-      <div className="bg-crack-large" style={{ top: '75%', right: '-5%',  transform: 'rotate(-30deg) scale(0.6)' }} />
-      {/* <div className="bg-web-large" style={{ top: '90%', left: '20%', transform: 'rotate(90deg) scale(0.8)' }} /> */}
+      <div className="bg-crack-large" style={{ top: '75%', right: '-5%', transform: 'rotate(-30deg) scale(0.6)' }} />
 
       {/* Scroll Progress Bar */}
       <motion.div
@@ -372,11 +369,32 @@ ${form.message}`
           </div>
 
           <div className="flex items-center space-x-3">
+            {/* Language Switcher */}
+            <Magnetic strength={20}>
+              <div className="flex items-center p-0.5 border-2 border-[#386641] dark:border-white rounded-sm bg-white/40 dark:bg-black/40 text-[10px] font-black tracking-wider shadow-sm">
+                <button
+                  onClick={() => handleSetLanguage('vi')}
+                  className={`px-2 py-1 rounded-sm transition-all ${language === 'vi' ? 'bg-[#bc4749] text-white shadow-md scale-105' : 'text-gray-600 dark:text-gray-300 hover:text-[#bc4749]'}`}
+                  aria-label="Tiếng Việt"
+                >
+                  VI
+                </button>
+                <button
+                  onClick={() => handleSetLanguage('en')}
+                  className={`px-2 py-1 rounded-sm transition-all ${language === 'en' ? 'bg-[#bc4749] text-white shadow-md scale-105' : 'text-gray-600 dark:text-gray-300 hover:text-[#bc4749]'}`}
+                  aria-label="English"
+                >
+                  EN
+                </button>
+              </div>
+            </Magnetic>
+
+            {/* Dark Mode Toggle */}
             <Magnetic strength={30}>
               <button
                 onClick={toggleDarkMode}
                 className="p-3 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all active:scale-90"
-                aria-label="Toggle Dark Mode"
+                aria-label={t.nav.toggleTheme}
               >
                 <AnimatePresence mode="wait">
                   {isDarkMode ? (
@@ -391,15 +409,17 @@ ${form.message}`
                 </AnimatePresence>
               </button>
             </Magnetic>
+
+            {/* CV Download Button */}
             <Magnetic strength={20}>
               <a
                 href={PERSONAL_INFO.cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 download
-                className="bg-[#bc4749] text-white px-6 py-2.5 rounded-sm font-black uppercase text-[10px] tracking-widest hover:bg-[#a53b3d] transition-all flex items-center gap-2 shadow-lg hover:shadow-red-500/20 active:scale-95"
+                className="bg-[#bc4749] text-white px-5 py-2.5 rounded-sm font-black uppercase text-[10px] tracking-widest hover:bg-[#a53b3d] transition-all flex items-center gap-2 shadow-lg hover:shadow-red-500/20 active:scale-95"
               >
-                <Download className="w-4 h-4" /> CV
+                <Download className="w-4 h-4" /> {t.nav.downloadCv}
               </a>
             </Magnetic>
           </div>
@@ -432,8 +452,6 @@ ${form.message}`
 
         <div className="max-w-5xl w-full z-10">
           <RetroSign>
-
-
             <div className="relative mb-12 lg:mb-0 shrink-0">
               <motion.div
                 initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
@@ -482,7 +500,7 @@ ${form.message}`
                 {PERSONAL_INFO.role}
               </motion.p>
               <div className="text-lg md:text-xl italic font-semibold mb-12 leading-relaxed text-gray-800 dark:text-[#FDF5E6] h-16">
-                <Typewriter text={PERSONAL_INFO.tagline} />
+                <Typewriter text={getText(PERSONAL_INFO.tagline, language)} />
               </div>
               <div className="flex flex-wrap justify-center gap-6">
                 <Magnetic strength={40}>
@@ -490,21 +508,21 @@ ${form.message}`
                     onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                     className="group bg-[#386641] text-white px-10 py-4 rounded-sm font-black uppercase tracking-widest hover:bg-[#2d5234] transition-all flex items-center gap-3 shadow-2xl"
                   >
-                    Tuyển dụng tôi <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    {t.hero.hireMe} <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </button>
                 </Magnetic>
                 <Magnetic strength={40}>
                   <a
                     href={PERSONAL_INFO.github}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="group border-4 border-[#386641] dark:border-retro-dark text-inherit px-10 py-4 rounded-sm font-black uppercase tracking-widest hover:bg-[#386641] dark:hover:bg-retro-dark hover:text-white dark:hover:text-[#FDF5E6] transition-all shadow-xl flex items-center gap-3"
                   >
-                    GitHub <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                    {t.hero.github} <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                   </a>
                 </Magnetic>
               </div>
             </div>
-
           </RetroSign>
         </div>
 
@@ -514,12 +532,10 @@ ${form.message}`
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50"
         >
-          <span className="text-[10px] uppercase font-black tracking-widest">Cuộn xuống</span>
+          <span className="text-[10px] uppercase font-black tracking-widest">{t.nav.scrollDown}</span>
           <ArrowDown className="w-4 h-4 opacity-70" />
-
         </motion.div>
       </section>
-      
 
       {/* About Section */}
       <section id="about" className={`py-32 px-4 transition-colors duration-1000 ${isDarkMode ? 'bg-[#222]' : 'bg-[#f5ead5]'}`}>
@@ -531,20 +547,14 @@ ${form.message}`
             transition={{ duration: 0.8 }}
           >
             <div className="inline-block px-5 py-2 bg-[#bc4749] text-white font-black uppercase text-xs tracking-[0.4em] mb-8 shadow-lg">
-              VỀ TÔI
+              {t.about.tag}
             </div>
             <h2 className="text-5xl md:text-7xl font-black uppercase mb-10 tracking-tight retro-shadow leading-none">
-              Hành Trình <br /> & <span className="text-[#bc4749]">Đam Mê</span>
+              {t.about.heading1} <br /> & <span className="text-[#bc4749]">{t.about.heading2}</span>
             </h2>
             <div className="space-y-6 text-xl leading-relaxed text-gray-800 dark:text-[#FDF5E6] font-medium">
-              <p>
-                Tôi là một sinh viên CNTT tại Đại học Cần Thơ, người luôn khao khát khám phá thế giới công nghệ.
-                Với sự kiên trì và tư duy logic, tôi không chỉ học cách lập trình mà còn học cách giải quyết vấn đề một cách sáng tạo.
-              </p>
-              <p>
-                Phong cách làm việc của tôi là sự kết hợp giữa kỹ thuật vững chắc và tinh thần đổi mới.
-                Tôi tin rằng mỗi dòng code đều là một phần của giải pháp lớn hơn nhằm cải thiện trải nghiệm người dùng.
-              </p>
+              <p>{t.about.p1}</p>
+              <p>{t.about.p2}</p>
             </div>
 
             <div className="mt-12 grid grid-cols-2 gap-8">
@@ -552,13 +562,13 @@ ${form.message}`
                 <div className="font-black text-[#bc4749] text-5xl mb-2">
                   <Counter value={4} />
                 </div>
-                <div className="text-xs font-black uppercase tracking-widest text-gray-600 dark:text-gray-300">Năm học tập</div>
+                <div className="text-xs font-black uppercase tracking-widest text-gray-600 dark:text-gray-300">{t.about.yearsStudy}</div>
               </motion.div>
               <motion.div whileHover={{ y: -10 }} className="p-8 border-l-8 border-[#386641] dark:border-white bg-white/50 dark:bg-black/30 backdrop-blur-md shadow-xl">
                 <div className="font-black text-[#bc4749] text-5xl mb-2">
                   <Counter value={4} />+
                 </div>
-                <div className="text-xs font-black uppercase tracking-widest text-gray-600 dark:text-gray-300">Dự án hoàn thiện</div>
+                <div className="text-xs font-black uppercase tracking-widest text-gray-600 dark:text-gray-300">{t.about.completedProjects}</div>
               </motion.div>
             </div>
           </motion.div>
@@ -570,10 +580,11 @@ ${form.message}`
             transition={{ duration: 0.8 }}
             className="grid grid-cols-1 gap-10"
           >
+            {/* Skills */}
             <div className="bg-[#386641] text-[#FDF5E6] p-10 rounded-sm shadow-2xl vintage-texture border-4 border-[#386641] dark:bg-retro-dark dark:border-white transform md:rotate-2 hover:rotate-0 transition-transform duration-500 dust-overlay spider-web-tl relative">
               <div className="dust-layer"></div>
               <h3 className="text-3xl font-black uppercase mb-8 flex items-center gap-4">
-                <Code2 className="w-10 h-10" /> Kỹ năng chính
+                <Code2 className="w-10 h-10" /> {t.about.skillsTitle}
               </h3>
               <div className="flex flex-wrap gap-3">
                 {SKILLS.map((skill, index) => (
@@ -582,28 +593,45 @@ ${form.message}`
                     whileHover={{ scale: 1.1, rotate: index % 2 === 0 ? 5 : -5 }}
                     className={`px-5 py-3 text-xs font-black uppercase border-2 shadow-md ${skill.category === 'technical' ? 'border-[#FDF5E6] text-[#FDF5E6]' : 'border-[#bc4749] text-[#bc4749] bg-[#FDF5E6]'} rounded-sm cursor-default transition-colors`}
                   >
-                    {skill.name}
+                    {getText(skill.name, language)}
                   </motion.span>
                 ))}
               </div>
             </div>
 
+            {/* Achievements */}
             <div className="bg-white dark:bg-[#333] p-10 rounded-sm shadow-2xl vintage-texture border-4 border-[#386641] dark:border-white transform md:-rotate-1 hover:rotate-0 transition-transform duration-500 dust-overlay crack-bl relative">
               <div className="dust-layer"></div>
               <h3 className="text-3xl font-black uppercase mb-8 flex items-center gap-4 text-[#bc4749]">
-                <Award className="w-10 h-10" /> Thành tựu
+                <Award className="w-10 h-10" /> {t.about.achievementsTitle}
               </h3>
-              <ul className="space-y-6">
+              <ul className="space-y-4">
                 {ACHIEVEMENTS.map((ach, index) => (
                   <motion.li
                     key={index}
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.2 }}
-                    className="flex flex-col border-b-2 border-gray-100 dark:border-white/10 pb-4 last:border-0 last:pb-0 group"
+                    className={`flex flex-col border-b-2 border-gray-100 dark:border-white/10 pb-4 last:border-0 last:pb-0 group transition-all ${
+                      ach.highlight
+                        ? "p-4 bg-gradient-to-r from-[#bc4749]/15 to-transparent border-l-4 border-l-[#bc4749] rounded-sm mb-2"
+                        : ""
+                    }`}
                   >
-                    <span className="font-black text-xl text-[#386641] dark:text-[#FDF5E6] group-hover:text-[#bc4749] transition-colors">{ach.title}</span>
-                    <span className="text-sm text-gray-700 dark:text-[#FDF5E6] opacity-80 italic font-bold mt-1 uppercase tracking-wider">{ach.issuer}</span>
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="font-black text-lg md:text-xl text-[#386641] dark:text-[#FDF5E6] group-hover:text-[#bc4749] transition-colors flex items-center gap-2">
+                        {ach.highlight && <Trophy className="w-5 h-5 text-[#bc4749] shrink-0 animate-pulse" />}
+                        {getText(ach.title, language)}
+                      </span>
+                      {ach.badge && (
+                        <span className="shrink-0 px-2.5 py-0.5 bg-[#bc4749] text-white font-black text-[9px] uppercase tracking-widest shadow-md rounded-full">
+                          {getText(ach.badge, language)}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs md:text-sm text-gray-700 dark:text-[#FDF5E6] opacity-80 italic font-bold mt-1 uppercase tracking-wider">
+                      {ach.issuer}
+                    </span>
                   </motion.li>
                 ))}
               </ul>
@@ -622,23 +650,23 @@ ${form.message}`
               whileInView={{ opacity: 1, y: 0 }}
               className="inline-block px-5 py-2 bg-[#bc4749] text-white font-black uppercase text-xs tracking-[0.4em] mb-6"
             >
-              PROJECTS
+              {t.projects.tag}
             </motion.div>
             <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tight retro-shadow">
-              Sản Phẩm <span className="text-[#386641]">Cá Nhân</span>
+              {t.projects.heading1} <span className="text-[#386641]">{t.projects.heading2}</span>
             </h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
             {PROJECTS.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
+              <ProjectCard key={project.id} project={project} index={index} language={language} />
             ))}
           </div>
 
           <div className="mt-20 text-center">
             <Magnetic strength={30}>
-              <a href={PERSONAL_INFO.github} target="_blank" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-[0.3em] hover:text-[#bc4749] transition-all group">
-                Xem tất cả trên GitHub <ArrowRight className="w-5 h-5 group-hover:translate-x-3 transition-transform" />
+              <a href={PERSONAL_INFO.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-[0.3em] hover:text-[#bc4749] transition-all group">
+                {t.projects.viewAllGithub} <ArrowRight className="w-5 h-5 group-hover:translate-x-3 transition-transform" />
               </a>
             </Magnetic>
           </div>
@@ -656,7 +684,7 @@ ${form.message}`
           >
             <RetroSign variant="secondary" className="border-[6px] shadow-2xl crack-br">
               <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter">
-                Kinh Nghiệm & Học Vấn
+                {t.experience.heading}
               </h2>
             </RetroSign>
           </motion.div>
@@ -683,25 +711,87 @@ ${form.message}`
                 <motion.div
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
-                  className="absolute left-[14px] top-4 w-7 h-7 bg-[#bc4749] rounded-full border-[6px] border-[#FDF5E6] dark:border-[#1a1a1a] z-10 shadow-lg group-hover:scale-125 transition-transform"
+                  className={`absolute left-[14px] top-4 w-7 h-7 ${
+                    exp.badge ? "bg-[#bc4749]" : "bg-[#386641] dark:bg-[#bc4749]"
+                  } rounded-full border-[6px] border-[#FDF5E6] dark:border-[#1a1a1a] z-10 shadow-lg group-hover:scale-125 transition-transform`}
                 />
 
-                <div className={`bg-white dark:bg-[#333] p-10 shadow-2xl border-4 border-[#386641] dark:border-white rounded-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)] dust-overlay relative ${index % 2 === 0 ? "spider-web-tr" : ""}`}>
+                <div className={`bg-white dark:bg-[#333] p-8 md:p-10 shadow-2xl border-4 border-[#386641] dark:border-white rounded-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)] dust-overlay relative ${index % 2 === 0 ? "spider-web-tr" : ""}`}>
                   <div className="dust-layer"></div>
-                  <div className="flex flex-wrap justify-between items-center gap-6 mb-6">
-                    <h3 className="text-3xl font-black uppercase text-[#386641] dark:text-white group-hover:text-[#bc4749] transition-colors">
-                      {exp.company}
-                    </h3>
+                  
+                  {/* Header Info */}
+                  <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-black uppercase text-[#386641] dark:text-white group-hover:text-[#bc4749] transition-colors">
+                        {exp.company}
+                      </h3>
+                      {exp.badge && (
+                        <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-[#bc4749] to-[#d90429] text-white text-[10px] md:text-xs font-black uppercase tracking-widest shadow-md rounded-sm">
+                          <Trophy className="w-3.5 h-3.5" />
+                          {getText(exp.badge, language)}
+                        </div>
+                      )}
+                    </div>
                     <span className="px-5 py-2 bg-[#bc4749] text-white font-black text-xs uppercase tracking-widest shadow-md">
-                      {exp.period}
+                      {getText(exp.period, language)}
                     </span>
                   </div>
-                  <h4 className="text-xl font-black uppercase mb-6 italic text-gray-800 dark:text-[#FDF5E6] flex items-center gap-3">
-                    <Briefcase className="w-5 h-5 text-[#bc4749]" /> {exp.role}
+
+                  <h4 className="text-xl font-black uppercase mb-4 italic text-gray-800 dark:text-[#FDF5E6] flex items-center gap-3">
+                    <Briefcase className="w-5 h-5 text-[#bc4749]" /> {getText(exp.role, language)}
                   </h4>
-                  <p className="leading-relaxed text-gray-700 dark:text-white font-semibold text-lg opacity-90">
-                    {exp.description}
+
+                  <p className="leading-relaxed text-gray-700 dark:text-white font-semibold text-base md:text-lg opacity-90 mb-6">
+                    {getText(exp.description, language)}
                   </p>
+
+                  {/* Bullet Highlights */}
+                  {exp.highlights && exp.highlights.length > 0 && (
+                    <div className="mb-6 p-4 bg-[#FDF5E6]/80 dark:bg-black/30 border-l-4 border-[#386641] dark:border-[#bc4749] rounded-sm">
+                      <h5 className="text-xs font-black uppercase tracking-widest text-[#386641] dark:text-[#bc4749] mb-3 flex items-center gap-2">
+                        <Star className="w-4 h-4 fill-current" /> {t.experience.highlightsTitle}
+                      </h5>
+                      <ul className="space-y-2">
+                        {exp.highlights.map((item, hIdx) => (
+                          <li key={hIdx} className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200 flex items-start gap-2">
+                            <span className="text-[#bc4749] font-black mt-0.5">•</span>
+                            <span>{getText(item, language)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Images Showcase */}
+                  {exp.images && exp.images.length > 0 && (
+                    <div className="mt-6 pt-6 border-t-2 border-gray-100 dark:border-white/10">
+                      <h5 className="text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-300 mb-4 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-[#bc4749]" /> {t.experience.galleryTitle}
+                      </h5>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {exp.images.map((imgSrc, imgIdx) => (
+                          <motion.div
+                            key={imgIdx}
+                            whileHover={{ scale: 1.02, rotate: 1 }}
+                            className="group/img relative bg-[#FDF5E6] dark:bg-[#1a1a1a] p-3 border-4 border-[#386641] dark:border-white shadow-xl transform -rotate-1 hover:rotate-0 transition-all duration-300"
+                          >
+                            <div className="overflow-hidden h-64 md:h-80 border-2 border-dashed border-[#386641]/40 dark:border-white/40">
+                              <img
+                                src={imgSrc}
+                                alt={`${exp.company} achievement ${imgIdx + 1}`}
+                                className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-500 group-hover/img:scale-105"
+                              />
+                            </div>
+                            <div className="mt-3 text-center">
+                              <span className="text-[11px] font-black uppercase tracking-wider text-[#386641] dark:text-[#FDF5E6] block">
+                                {t.experience.imageCaption}
+                              </span>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -718,10 +808,10 @@ ${form.message}`
               whileInView={{ opacity: 1, x: 0 }}
             >
               <div className="inline-block px-5 py-2 bg-[#386641] text-white font-black uppercase text-xs tracking-[0.4em] mb-6 shadow-md">
-                KNOWLEDGE BASE
+                {t.blog.tag}
               </div>
               <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tight retro-shadow">
-                Blog <span className="text-[#bc4749]">Cá Nhân</span>
+                {t.blog.heading1} <span className="text-[#bc4749]">{t.blog.heading2}</span>
               </h2>
             </motion.div>
             <motion.p
@@ -729,7 +819,7 @@ ${form.message}`
               whileInView={{ opacity: 1, x: 0 }}
               className="max-w-xl text-lg italic text-gray-700 dark:text-[#FDF5E6] font-bold border-l-4 border-[#bc4749] pl-6"
             >
-              Viết về công nghệ, lập trình và cách ứng dụng AI trong thực tế để tối ưu hóa hiệu suất công việc.
+              {t.blog.subtitle}
             </motion.p>
           </div>
 
@@ -738,18 +828,18 @@ ${form.message}`
               {
                 id: 1,
                 date: "25/02/2026",
-                category: "AI • Thủ thuật",
-                title: "Hướng dẫn nhận 3 tháng Google AI Pro miễn phí",
-                desc: "Thông qua khóa học của Google trên Coursera, bạn sẽ nhận được đặc quyền dùng thử 3 tháng Gemini Advanced + 2TB Google Drive hoàn toàn miễn phí.",
+                category: language === 'vi' ? "AI • Thủ thuật" : "AI • Tips",
+                title: language === 'vi' ? "Hướng dẫn nhận 3 tháng Google AI Pro miễn phí" : "How to Claim 3 Months of Google AI Pro for Free",
+                desc: language === 'vi' ? "Thông qua khóa học của Google trên Coursera, bạn sẽ nhận được đặc quyền dùng thử 3 tháng Gemini Advanced + 2TB Google Drive hoàn toàn miễn phí." : "Through Google's course on Coursera, claim 3 months of complimentary Gemini Advanced + 2TB Google Drive storage.",
                 href: "#guide",
                 target: "_self"
               },
               {
                 id: 2,
-                date: new Date().toLocaleDateString('vi-VN'),
-                category: "Công nghệ • AI",
-                title: "Trang Blog Phú Làm Công Nghệ",
-                desc: "Với vai trò GSA, mình tập trung truyền đạt cách ứng dụng AI vào học tập, nghiên cứu, lập trình và công việc thực tế — giúp bạn làm nhanh hơn, hiểu sâu hơn...",
+                date: new Date().toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-US'),
+                category: language === 'vi' ? "Công nghệ • AI" : "Tech • AI",
+                title: language === 'vi' ? "Trang Blog Phú Làm Công Nghệ" : "Phú Làm Công Nghệ Tech Blog",
+                desc: language === 'vi' ? "Với vai trò GSA, mình tập trung truyền đạt cách ứng dụng AI vào học tập, nghiên cứu, lập trình và công việc thực tế — giúp bạn làm nhanh hơn, hiểu sâu hơn..." : "As a GSA, sharing practical AI integration for learning, research, coding, and real-world work to boost speed and depth...",
                 href: "https://www.facebook.com/phulamcongnghe",
                 target: "_blank"
               }
@@ -776,7 +866,7 @@ ${form.message}`
                       {...(post.target === "_blank" ? { rel: "noopener noreferrer" } : {})}
                       className="inline-flex items-center gap-3 font-black uppercase text-xs tracking-[0.3em] hover:gap-6 transition-all hover:text-[#bc4749]"
                     >
-                      Đọc thêm <ArrowRight className="w-5 h-5" />
+                      {t.blog.readMore} <ArrowRight className="w-5 h-5" />
                     </a>
                   </Magnetic>
                 </div>
@@ -790,7 +880,6 @@ ${form.message}`
       <section id="contact" className="py-32 px-4 overflow-hidden relative">
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-24 items-start">
-
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -798,10 +887,10 @@ ${form.message}`
             >
               <RetroSign className="mb-12 border-[6px] shadow-2xl spider-web-tl" noneRow>
                 <h2 className="text-5xl md:text-7xl font-black uppercase mb-6 tracking-tighter retro-3d-text">
-                  Liên Hệ <span className="text-white">Ngay</span>
+                  {t.contact.title1} <span className="text-white">{t.contact.title2}</span>
                 </h2>
-                <p className="font-black uppercase tracking-[0.3em] text-[#bc4749] bg-white/10 py-2 inline-block">
-                  Cùng nhau tạo nên điều kỳ diệu!
+                <p className="font-black uppercase tracking-[0.3em] text-[#bc4749] bg-white/10 py-2 inline-block px-3">
+                  {t.contact.tagline}
                 </p>
               </RetroSign>
 
@@ -812,7 +901,7 @@ ${form.message}`
                     <Mail className="w-8 h-8" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">Thư điện tử</div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">{t.contact.emailLabel}</div>
                     <a href={`mailto:${PERSONAL_INFO.email}`} className="text-xl md:text-2xl font-black hover:text-[#bc4749] break-all dark:text-white transition-colors">{PERSONAL_INFO.email}</a>
                   </div>
                 </motion.div>
@@ -823,7 +912,7 @@ ${form.message}`
                     <Phone className="w-8 h-8" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">Điện thoại</div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 dark:text-gray-400 mb-1">{t.contact.phoneLabel}</div>
                     <a href={`tel:${PERSONAL_INFO.phone}`} className="text-xl md:text-2xl font-black hover:text-[#bc4749] dark:text-white transition-colors">{PERSONAL_INFO.phone}</a>
                   </div>
                 </motion.div>
@@ -834,12 +923,7 @@ ${form.message}`
                       href={PERSONAL_INFO.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center p-5 
-      border-4 border-[#386641] dark:border-white
-      bg-white/20 backdrop-blur-md
-      shadow-2xl
-      hover:bg-[#386641] hover:text-white
-      transition-all duration-300"
+                      className="inline-flex items-center justify-center p-5 border-4 border-[#386641] dark:border-white bg-white/20 backdrop-blur-md shadow-2xl hover:bg-[#386641] hover:text-white transition-all duration-300"
                     >
                       <Github className="w-8 h-8" />
                     </a>
@@ -850,18 +934,12 @@ ${form.message}`
                       href={PERSONAL_INFO.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center p-5 
-      border-4 border-[#386641] dark:border-white
-      bg-white/20 backdrop-blur-md
-      shadow-2xl
-      hover:bg-[#386641] hover:text-white
-      transition-all duration-300"
+                      className="inline-flex items-center justify-center p-5 border-4 border-[#386641] dark:border-white bg-white/20 backdrop-blur-md shadow-2xl hover:bg-[#386641] hover:text-white transition-all duration-300"
                     >
                       <Facebook className="w-8 h-8" />
                     </a>
                   </Magnetic>
                 </div>
-
               </div>
             </motion.div>
 
@@ -872,52 +950,61 @@ ${form.message}`
               className="bg-white dark:bg-[#222] p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-[6px] border-[#386641] dark:border-white relative vintage-texture"
             >
               <h3 className="text-4xl font-black uppercase mb-12 text-center text-[#386641] dark:text-[#bc4749] tracking-tighter">
-                Gửi Tin Nhắn
+                {t.contact.formTitle}
               </h3>
               <form className="space-y-8" onSubmit={handleSubmit}>
                 <div className="space-y-3">
-                  <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Danh tính của bạn</label>
+                  <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">
+                    {t.contact.nameLabel}
+                  </label>
                   <input
                     type="text"
                     name="name"
                     onChange={handleChange}
                     value={form.name}
-                    placeholder="NGUYỄN VĂN A"
+                    placeholder={t.contact.namePlaceholder}
+                    required
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Địa chỉ liên hệ</label>
+                  <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">
+                    {t.contact.emailFieldLabel}
+                  </label>
                   <input
                     type="email"
                     name="email"
                     onChange={handleChange}
                     value={form.email}
-                    placeholder="EMAIL@EXAMPLE.COM"
+                    placeholder={t.contact.emailPlaceholder}
+                    required
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">Lời nhắn của bạn</label>
+                  <label className="text-xs font-black uppercase tracking-[0.3em] text-[#bc4749] dark:text-white block">
+                    {t.contact.messageLabel}
+                  </label>
                   <textarea
                     rows={5}
                     name="message"
                     onChange={handleChange}
                     value={form.message}
-                    placeholder="TÔI MUỐN HỢP TÁC..."
+                    placeholder={t.contact.messagePlaceholder}
+                    required
                     className="w-full p-5 border-4 border-[#386641] dark:border-white bg-transparent focus:outline-none focus:ring-4 focus:ring-[#bc4749]/20 transition-all font-black uppercase tracking-widest text-inherit placeholder:text-gray-300 dark:placeholder:text-gray-600"
                   />
                 </div>
                 <Magnetic strength={20}>
                   <button
+                    type="submit"
                     className="group w-full bg-[#bc4749] text-white py-6 font-black uppercase tracking-[0.4em] text-sm hover:bg-[#a53b3d] transition-all transform active:scale-95 shadow-2xl flex items-center justify-center gap-4"
                   >
-                    GỬI NGAY <Send className="w-5 h-5 group-hover:translate-x-3 group-hover:-translate-y-3 transition-transform" />
+                    {t.contact.sendButton} <Send className="w-5 h-5 group-hover:translate-x-3 group-hover:-translate-y-3 transition-transform" />
                   </button>
                 </Magnetic>
               </form>
             </motion.div>
-
           </div>
         </div>
 
@@ -944,7 +1031,7 @@ ${form.message}`
               TRẦN MINH PHÚ
             </motion.div>
             <div className="text-xs uppercase font-black mt-2 tracking-[0.5em] text-gray-500 dark:text-white/40">
-              © 2025 ALL RIGHTS RESERVED.
+              {t.footer.rights}
             </div>
           </div>
 

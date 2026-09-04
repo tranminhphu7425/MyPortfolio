@@ -5,6 +5,7 @@ interface RetroSignProps {
   children: React.ReactNode;
   className?: string;
   variant?: 'primary' | 'secondary';
+  noneRow?: boolean;
 }
 
 const RetroSign: React.FC<RetroSignProps> = ({ children, className = "", variant = 'primary', noneRow }) => {

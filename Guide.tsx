@@ -9,16 +9,28 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RetroSign from './components/RetroSign';
+import { Language } from './types';
+import { TRANSLATIONS } from './translations';
 
 const Guide: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [language, setLanguage] = useState<Language>('vi');
 
   useEffect(() => {
     const savedMode = localStorage.getItem('theme');
     if (savedMode === 'dark' || (!savedMode && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       setIsDarkMode(true);
     }
+    const savedLang = localStorage.getItem('language') as Language;
+    if (savedLang === 'vi' || savedLang === 'en') {
+      setLanguage(savedLang);
+    }
   }, []);
+
+  const handleSetLanguage = (lang: Language) => {
+    setLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
 
   useEffect(() => {
     if (isDarkMode) {
@@ -31,6 +43,8 @@ const Guide: React.FC = () => {
   }, [isDarkMode]);
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+
+  const t = TRANSLATIONS[language];
 
   return (
     <div className={`motion-container min-h-screen transition-colors duration-700 font-medium ${isDarkMode ? 'bg-[#1a1a1a] text-[#FDF5E6]' : 'bg-[#FDF5E6] text-[#333]'}`}>
@@ -46,25 +60,45 @@ const Guide: React.FC = () => {
             href="/"
             className="text-[#bc4749] font-black uppercase tracking-widest flex items-center gap-2 hover:translate-x-[-5px] transition-transform"
           >
-            <ArrowLeft className="w-5 h-5" /> QUAY LẠI
+            <ArrowLeft className="w-5 h-5" /> {t.guide.back}
           </a>
-          <button
-            onClick={toggleDarkMode}
-            className="p-3 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all active:scale-90"
-            aria-label="Toggle Dark Mode"
-          >
-            <AnimatePresence mode="wait">
-              {isDarkMode ? (
-                <motion.div key="sun" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
-                  <Sun className="w-5 h-5 text-yellow-400" />
-                </motion.div>
-              ) : (
-                <motion.div key="moon" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
-                  <Moon className="w-5 h-5 text-[#386641]" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </button>
+          <div className="flex items-center gap-4">
+            {/* Language Switcher */}
+            <div className="flex items-center p-0.5 border-2 border-[#386641] dark:border-white rounded-sm bg-white/40 dark:bg-black/40 text-[10px] font-black tracking-wider shadow-sm">
+              <button
+                onClick={() => handleSetLanguage('vi')}
+                className={`px-2 py-1 rounded-sm transition-all ${language === 'vi' ? 'bg-[#bc4749] text-white shadow-md scale-105' : 'text-gray-600 dark:text-gray-300 hover:text-[#bc4749]'}`}
+                aria-label="Tiếng Việt"
+              >
+                VI
+              </button>
+              <button
+                onClick={() => handleSetLanguage('en')}
+                className={`px-2 py-1 rounded-sm transition-all ${language === 'en' ? 'bg-[#bc4749] text-white shadow-md scale-105' : 'text-gray-600 dark:text-gray-300 hover:text-[#bc4749]'}`}
+                aria-label="English"
+              >
+                EN
+              </button>
+            </div>
+
+            <button
+              onClick={toggleDarkMode}
+              className="p-3 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all active:scale-90"
+              aria-label="Toggle Dark Mode"
+            >
+              <AnimatePresence mode="wait">
+                {isDarkMode ? (
+                  <motion.div key="sun" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
+                    <Sun className="w-5 h-5 text-yellow-400" />
+                  </motion.div>
+                ) : (
+                  <motion.div key="moon" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
+                    <Moon className="w-5 h-5 text-[#386641]" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
       </nav>
 
